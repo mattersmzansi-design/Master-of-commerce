@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
+import { useAuth } from "../lib/AuthContext";
+import AuthModal from "./AuthModal";
 
 const LINKS = [
   { label:"Business News",    path:"/news"     },
@@ -8,10 +11,13 @@ const LINKS = [
   { label:"Crypto",           path:"/crypto"   },
   { label:"Economic Calendar",path:"/calendar" },
   { label:"Soccer Betting",   path:"/betting"  },
+  { label:"Settings",         path:"/settings" },
 ];
 
 export default function Nav() {
   const { pathname } = useLocation();
+  const { user, signOut } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
   const today = new Date().toLocaleDateString("en-ZA",{ weekday:"long", year:"numeric", month:"long", day:"numeric" });
 
   return (
@@ -29,11 +35,18 @@ export default function Nav() {
         <div style={{ textAlign:"right" }}>
           <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, marginBottom:8, letterSpacing:".04em" }}>{today}</div>
           <div style={{ display:"flex", gap:10 }}>
-            <button style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.ink, border:`1px solid ${C.rule}`, padding:"6px 16px" }}>Sign In</button>
-            <button style={{ fontFamily:SANS, fontSize:12, fontWeight:700, background:C.ink, color:C.bg, padding:"6px 16px" }}>Subscribe</button>
+            {user ? (
+              <>
+                <span style={{ fontFamily:SANS, fontSize:12, color:C.muted, alignSelf:"center" }}>{user.email}</span>
+                <button onClick={signOut} style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.ink, border:`1px solid ${C.rule}`, padding:"6px 16px" }}>Sign Out</button>
+              </>
+            ) : (
+              <button onClick={() => setShowAuth(true)} style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.ink, border:`1px solid ${C.rule}`, padding:"6px 16px" }}>Sign In</button>
+            )}
           </div>
         </div>
       </div>
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
       {/* Section nav */}
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px", display:"flex", gap:0, overflowX:"auto" }}>
         {LINKS.map(l => {
