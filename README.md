@@ -2,6 +2,8 @@
 
 Your daily brief for global markets, live crypto, business news, economic calendar and soccer betting.
 
+📖 See the [wiki](wiki/Home.md) for full documentation — setup, project structure, routes, theming, deployment, known issues, and roadmap.
+
 ## Quick start (run locally)
 
 You need Node.js 18+ from nodejs.org.
