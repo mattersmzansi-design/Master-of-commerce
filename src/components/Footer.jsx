@@ -11,9 +11,9 @@ const COLS = [
 export default function Footer({ note, children }) {
   return (
     <footer style={{ background:C.ink, color:C.bg }}>
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"48px 28px 0" }}>
-        <div style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(4,1fr)", gap:32, flexWrap:"wrap" }}>
-          <div>
+      <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"48px 28px 0" }}>
+        <div className="mc-footer" style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(4,1fr)", gap:32 }}>
+          <div className="mc-footer-brand">
             <h2 style={{ fontFamily:SERIF, fontSize:22, fontWeight:700, marginBottom:10 }}>Master of Commerce</h2>
             <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:200 }}>Your daily brief for global markets, live data and soccer betting.</p>
           </div>

@@ -17,7 +17,7 @@ export default function Nav() {
   return (
     <header style={{ background:C.paper, borderBottom:`2px solid ${C.ink}` }}>
       {/* Masthead */}
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"18px 28px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-end", borderBottom:`1px solid ${C.rule}` }}>
+      <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"18px 28px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-end", borderBottom:`1px solid ${C.rule}` }}>
         <div>
           <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, letterSpacing:".1em", textTransform:"uppercase", marginBottom:6 }}>Est. 2026 · South Africa & The World</div>
           <Link to="/" style={{ display:"block" }}>
@@ -30,12 +30,12 @@ export default function Nav() {
           <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, marginBottom:8, letterSpacing:".04em" }}>{today}</div>
           <div style={{ display:"flex", gap:10 }}>
             <button style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.ink, border:`1px solid ${C.rule}`, padding:"6px 16px" }}>Sign In</button>
-            <button style={{ fontFamily:SANS, fontSize:12, fontWeight:700, background:C.ink, color:C.bg, padding:"6px 16px" }}>Subscribe</button>
+            <button style={{ fontFamily:SANS, fontSize:12, fontWeight:700, background:C.orange, color:"#fff", padding:"6px 16px" }}>Subscribe</button>
           </div>
         </div>
       </div>
       {/* Section nav */}
-      <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px", display:"flex", gap:0, overflowX:"auto" }}>
+      <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px", display:"flex", gap:0, overflowX:"auto" }}>
         {LINKS.map(l => {
           const active = pathname === l.path;
           return (

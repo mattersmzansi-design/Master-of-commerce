@@ -179,7 +179,7 @@ export default function NYSEPage() {
       <Nav/>
 
       {/* header */}
-      <div style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 18px"}}>
+      <div className="mc-pad" style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 18px"}}>
         <div style={{maxWidth:1200,margin:"0 auto"}}>
           <div style={{fontFamily:MONO,fontSize:10,color:C.muted,letterSpacing:".06em",marginBottom:10}}>
             Markets / <span style={{color:C.ink}}>NYSE & NASDAQ</span>
@@ -223,10 +223,10 @@ export default function NYSEPage() {
       </div>
 
       {/* body */}
-      <section style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
+      <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
 
         {/* top movers */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:32}}>
+        <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:32}}>
           {[{label:"Top Gainers",list:gainers,color:C.green},{label:"Top Losers",list:losers,color:C.red}].map(({label,list,color})=>(
             <div key={label} style={{border:`1px solid ${C.rule}`,background:C.paper}}>
               <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color,padding:"10px 16px",borderBottom:`1px solid ${C.rule}`}}>{label} · Today</div>
@@ -282,9 +282,9 @@ export default function NYSEPage() {
         </div>
 
         {/* main table */}
-        <div style={{border:`1px solid ${C.rule}`,background:C.paper,marginBottom:16}}>
+        <div className="mc-scroll" style={{border:`1px solid ${C.rule}`,background:C.paper,marginBottom:16}}>
           {/* header row */}
-          <div style={{display:"grid",gridTemplateColumns:"80px 1fr 110px 90px 110px 110px 90px",gap:0,borderBottom:`2px solid ${C.ink}`,padding:"9px 16px"}}>
+          <div style={{display:"grid",gridTemplateColumns:"80px 1fr 110px 90px 110px 110px 90px",gap:0,minWidth:640,borderBottom:`2px solid ${C.ink}`,padding:"9px 16px"}}>
             {["Symbol","Company","Price","24H %","Market Cap","Volume","Sector"].map(h=>(
               <div key={h} style={{fontFamily:MONO,fontSize:9,textTransform:"uppercase",letterSpacing:".07em",color:C.muted,fontWeight:600}}>{h}</div>
             ))}
@@ -294,7 +294,7 @@ export default function NYSEPage() {
             const isLive=!!liveData[s.symbol];
             return (
               <div key={s.symbol} onClick={()=>{setSelected(s.symbol);fetchChart(s.symbol);}}
-                style={{display:"grid",gridTemplateColumns:"80px 1fr 110px 90px 110px 110px 90px",gap:0,
+                style={{display:"grid",gridTemplateColumns:"80px 1fr 110px 90px 110px 110px 90px",gap:0,minWidth:640,
                   padding:"12px 16px",borderBottom:i<filtered.slice(0,visible).length-1?`1px solid ${C.rule2}`:"none",cursor:"pointer"}}
                 onMouseEnter={e=>e.currentTarget.style.background="#FFF3E5"}
                 onMouseLeave={e=>e.currentTarget.style.background="transparent"}>

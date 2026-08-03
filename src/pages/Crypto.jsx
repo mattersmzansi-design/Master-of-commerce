@@ -159,7 +159,7 @@ export default function CryptoPage() {
       <Nav/>
 
       {/* breadcrumb + header */}
-      <div style={{background:C.paper, borderBottom:`1px solid ${C.rule}`, padding:"22px 28px"}}>
+      <div className="mc-pad" style={{background:C.paper, borderBottom:`1px solid ${C.rule}`, padding:"22px 28px"}}>
         <div style={{maxWidth:1200,margin:"0 auto"}}>
           <div style={{fontFamily:MONO,fontSize:10,color:C.muted,letterSpacing:".06em",marginBottom:8}}>Markets / <span style={{color:C.ink}}>Cryptocurrency</span></div>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:12}}>
@@ -178,7 +178,7 @@ export default function CryptoPage() {
       {/* global stats */}
       {globalCards.length>0 && (
         <div style={{borderBottom:`1px solid ${C.rule}`,background:C.paper}}>
-          <div style={{maxWidth:1200,margin:"0 auto",padding:"0 28px",display:"flex",gap:0}}>
+          <div className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"0 28px",display:"flex",gap:0,overflowX:"auto"}}>
             {globalCards.map(g=>(
               <div key={g.label} style={{padding:"12px 20px 12px 0",marginRight:20,borderRight:`1px solid ${C.rule}`,flexShrink:0}}>
                 <div style={{fontFamily:MONO,fontSize:9,color:C.muted,textTransform:"uppercase",letterSpacing:".07em",marginBottom:4}}>{g.label}</div>
@@ -194,8 +194,8 @@ export default function CryptoPage() {
 
       {/* top movers */}
       {coins.length>0 && (
-        <section style={{maxWidth:1200,margin:"0 auto",padding:"28px 28px 0"}}>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
+        <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"28px 28px 0"}}>
+          <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
             {[{label:"Top Gainers",list:gainers,color:C.green},{label:"Top Losers",list:losers,color:C.red}].map(({label,list,color})=>(
               <div key={label} style={{border:`1px solid ${C.rule}`,background:C.paper}}>
                 <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color,padding:"10px 14px",borderBottom:`1px solid ${C.rule}`}}>{label} · 24H</div>
@@ -220,7 +220,7 @@ export default function CryptoPage() {
       )}
 
       {/* main table */}
-      <section style={{maxWidth:1200,margin:"0 auto",padding:"0 28px 60px"}}>
+      <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"0 28px 60px"}}>
         {/* toolbar */}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:12,marginBottom:14}}>
           <input value={search} onChange={e=>{setSearch(e.target.value);setVisible(10);}}
@@ -243,8 +243,8 @@ export default function CryptoPage() {
         {catLoad&&<div style={{fontFamily:MONO,fontSize:11,color:C.muted,marginBottom:8}}>Loading category…</div>}
 
         {/* ledger table */}
-        <div style={{border:`1px solid ${C.rule}`,background:C.paper}}>
-          <table style={{width:"100%"}}>
+        <div className="mc-scroll" style={{border:`1px solid ${C.rule}`,background:C.paper}}>
+          <table style={{width:"100%",minWidth:660}}>
             <thead>
               <tr style={{borderBottom:`2px solid ${C.ink}`}}>
                 {["#","Coin","Price","24H %","7D Chart","Market Cap","Volume (24H)",""].map(h=>(
