@@ -107,7 +107,7 @@ export default function NewsPage() {
       <Nav/>
 
       {/* page header */}
-      <div style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 0"}}>
+      <div className="mc-pad" style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 0"}}>
         <div style={{maxWidth:1200,margin:"0 auto"}}>
           <div style={{fontFamily:MONO,fontSize:10,color:C.muted,letterSpacing:".06em",marginBottom:10}}>
             News / <span style={{color:C.ink}}>Business News</span>
@@ -121,7 +121,7 @@ export default function NewsPage() {
             </div>
           </div>
           {/* category strip */}
-          <div style={{display:"flex",gap:0,marginTop:16}}>
+          <div style={{display:"flex",gap:0,marginTop:16,overflowX:"auto"}}>
             {["All",...CATEGORIES].map(c=>(
               <button key={c} onClick={()=>{setCategory(c);setVisible(6);}}
                 style={{fontFamily:SANS,fontSize:12,fontWeight:category===c?700:500,
@@ -137,8 +137,8 @@ export default function NewsPage() {
       </div>
 
       {/* body */}
-      <section style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:40,alignItems:"start"}}>
+      <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
+        <div className="mc-collapse" style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:40,alignItems:"start"}}>
 
           {/* main column */}
           <div>
@@ -151,7 +151,7 @@ export default function NewsPage() {
 
             {/* featured story */}
             {showFeatured && featured && (
-              <div style={{borderTop:`2px solid ${C.ink}`,borderBottom:`1px solid ${C.rule}`,paddingTop:22,paddingBottom:22,marginBottom:22,display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
+              <div className="mc-collapse-sm" style={{borderTop:`2px solid ${C.ink}`,borderBottom:`1px solid ${C.rule}`,paddingTop:22,paddingBottom:22,marginBottom:22,display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
                 <div>
                   <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color:C.red,marginBottom:10}}>
                     Featured · {featured.cat}
@@ -178,14 +178,14 @@ export default function NewsPage() {
             ) : (
               <div>
                 {/* first 2 — big */}
-                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.rule,border:`1px solid ${C.rule}`,marginBottom:1}}>
+                <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:1,background:C.rule,border:`1px solid ${C.rule}`,marginBottom:1}}>
                   {visible6.slice(0,2).map(a=>(
                     <ArticleCard key={a.id} article={a} size="large" catColor={catColor(a.cat)}/>
                   ))}
                 </div>
                 {/* remaining — 3-col */}
                 {visible6.length > 2 && (
-                  <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,background:C.rule,border:`1px solid ${C.rule}`}}>
+                  <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,background:C.rule,border:`1px solid ${C.rule}`}}>
                     {visible6.slice(2).map(a=>(
                       <ArticleCard key={a.id} article={a} size="small" catColor={catColor(a.cat)}/>
                     ))}

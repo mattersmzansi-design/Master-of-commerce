@@ -68,7 +68,7 @@ export default function BettingPage() {
       <Nav/>
 
       {/* header */}
-      <div style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 0"}}>
+      <div className="mc-pad" style={{background:C.paper,borderBottom:`2px solid ${C.ink}`,padding:"22px 28px 0"}}>
         <div style={{maxWidth:1200,margin:"0 auto"}}>
           <div style={{fontFamily:MONO,fontSize:10,color:C.muted,letterSpacing:".06em",marginBottom:10}}>
             Betting / <span style={{color:C.ink}}>Soccer</span>
@@ -101,8 +101,8 @@ export default function BettingPage() {
       </div>
 
       {/* body */}
-      <section style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:32,alignItems:"flex-start"}}>
+      <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
+        <div className="mc-collapse" style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:32,alignItems:"flex-start"}}>
 
           {/* fixtures */}
           <div>

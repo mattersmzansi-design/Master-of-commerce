@@ -98,7 +98,7 @@ export default function CalendarPage() {
       <Nav/>
 
       {/* page header */}
-      <div style={{ background:C.paper, borderBottom:`2px solid ${C.ink}`, padding:"22px 28px 0" }}>
+      <div className="mc-pad" style={{ background:C.paper, borderBottom:`2px solid ${C.ink}`, padding:"22px 28px 0" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, letterSpacing:".06em", marginBottom:10 }}>
             Tools / <span style={{ color:C.ink }}>Economic Calendar</span>
@@ -123,8 +123,8 @@ export default function CalendarPage() {
       </div>
 
       {/* body */}
-      <section style={{ maxWidth:1200, margin:"0 auto", padding:"32px 28px 60px" }}>
-        <div style={{ display:"grid", gridTemplateColumns:"220px 1fr", gap:32, alignItems:"flex-start" }}>
+      <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"32px 28px 60px" }}>
+        <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"220px 1fr", gap:32, alignItems:"flex-start" }}>
 
           {/* ── filters sidebar ── */}
           <aside>
@@ -208,9 +208,9 @@ export default function CalendarPage() {
                 </div>
 
                 {/* events table */}
-                <div style={{ border:`1px solid ${C.rule}`, background:C.paper }}>
+                <div className="mc-scroll" style={{ border:`1px solid ${C.rule}`, background:C.paper }}>
                   {/* table header */}
-                  <div style={{ display:"grid", gridTemplateColumns:"70px 50px 120px 1fr 90px 80px 80px 36px", gap:0, borderBottom:`2px solid ${C.ink}`, padding:"8px 16px" }}>
+                  <div style={{ display:"grid", gridTemplateColumns:"70px 50px 120px 1fr 90px 80px 80px 36px", gap:0, minWidth:560, borderBottom:`2px solid ${C.ink}`, padding:"8px 16px" }}>
                     {["Time","","Country","Event","Prev","Forecast","Actual",""].map((h,i) => (
                       <div key={i} style={{ fontFamily:MONO, fontSize:9, textTransform:"uppercase", letterSpacing:".07em", color:C.muted, fontWeight:600 }}>{h}</div>
                     ))}
@@ -227,7 +227,7 @@ export default function CalendarPage() {
                       <div key={e.id}>
                         <div onClick={() => setExpandedId(isOpen ? null : e.id)}
                           style={{ display:"grid", gridTemplateColumns:"70px 50px 120px 1fr 90px 80px 80px 36px",
-                            gap:0, padding:"12px 16px", cursor:"pointer",
+                            gap:0, minWidth:560, padding:"12px 16px", cursor:"pointer",
                             background: isZA ? "rgba(31,92,75,0.04)" : "transparent",
                             borderBottom: ei < g.items.length-1 && !isOpen ? `1px solid ${C.rule2}` : "none" }}
                           onMouseEnter={e => e.currentTarget.style.background = isZA ? "rgba(31,92,75,0.08)" : "#FFF3E5"}

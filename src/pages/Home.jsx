@@ -112,7 +112,7 @@ export default function Home() {
 
       {/* ── Market Index Strip ── */}
       <div style={{ background:C.ink, overflowX:"auto" }}>
-        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px", display:"flex", gap:0 }}>
+        <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"0 28px", display:"flex", gap:0 }}>
           {MARKET_SUMMARY.map(m => (
             <Link to={m.link} key={m.label} style={{ display:"flex", flexDirection:"column", justifyContent:"center", padding:"7px 20px 7px 0", marginRight:20, borderRight:`1px solid rgba(255,255,255,.1)`, minWidth:120, flexShrink:0 }}>
               <div style={{ fontFamily:MONO, fontSize:9, color:"rgba(255,255,255,.45)", letterSpacing:".06em", textTransform:"uppercase", marginBottom:3 }}>{m.label}</div>
@@ -126,8 +126,8 @@ export default function Home() {
       </div>
 
       {/* ── Hero / Lead section ── */}
-      <section style={{ maxWidth:1200, margin:"0 auto", padding:"44px 28px 0", borderBottom:`1px solid ${C.rule}` }}>
-        <div style={{ display:"grid", gridTemplateColumns:"1.6fr 1fr", gap:36, alignItems:"start" }}>
+      <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"44px 28px 0", borderBottom:`1px solid ${C.rule}` }}>
+        <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"1.6fr 1fr", gap:36, alignItems:"start" }}>
 
           {/* Lead story */}
           {featuredArticle && (
@@ -165,7 +165,7 @@ export default function Home() {
         </div>
 
         {/* bottom article row */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, paddingTop:28, paddingBottom:28, marginTop:12, borderTop:`1px solid ${C.rule}` }}>
+        <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, paddingTop:28, paddingBottom:28, marginTop:12, borderTop:`1px solid ${C.rule}` }}>
           {bottomArticles.map(a => (
             <div key={a.id}>
               <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
@@ -177,7 +177,7 @@ export default function Home() {
       </section>
 
       {/* ── Markets ── */}
-      <section style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}` }}>
+      <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}` }}>
         <SectionHead title="Markets" sub="Live Prices" link="/crypto" />
         <div style={{ display:"flex", gap:0, marginBottom:0, borderBottom:`1px solid ${C.ink}` }}>
           {["JSE","NYSE","Crypto"].map(t => (
@@ -219,7 +219,7 @@ export default function Home() {
       </section>
 
       {/* ── Calendar + Betting side by side ── */}
-      <section style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}`, display:"grid", gridTemplateColumns:"1fr 1fr", gap:48 }}>
+      <section className="mc-pad mc-collapse" style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}`, display:"grid", gridTemplateColumns:"1fr 1fr", gap:48 }}>
         {/* Economic Calendar */}
         <div>
           <SectionHead title="Economic Calendar" sub="Upcoming Events" link="/calendar" />
@@ -296,7 +296,7 @@ export default function Home() {
 
       {/* ── Crypto snapshot ── */}
       {crypto.length > 0 && (
-        <section style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}` }}>
+        <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}` }}>
           <SectionHead title="Cryptocurrency" sub="Live Prices via CoinGecko" link="/crypto" />
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))", gap:1, background:C.rule }}>
             {crypto.slice(0,6).map(c => {
