@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
+import { fetchLiveNews } from "../lib/marketaux";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
@@ -72,43 +73,6 @@ const SNAPSHOT = [
   { label:"NYSE Composite",value:"19,872", chg:0.89 },
 ];
 
-// ─── Live news via Marketaux ──────────────────────────────────────────────────
-// Key comes from the VITE_MARKETAUX_KEY env var (never hard-coded / committed).
-// If it's missing or the request fails, the page falls back to the sample stories.
-const MARKETAUX_KEY = import.meta.env.VITE_MARKETAUX_KEY;
-
-const timeAgo = (iso) => {
-  const s = (Date.now() - new Date(iso).getTime()) / 1000;
-  if (!isFinite(s) || s < 0) return "just now";
-  if (s < 3600)  return `${Math.max(1, Math.round(s/60))}m ago`;
-  if (s < 86400) return `${Math.round(s/3600)}h ago`;
-  return `${Math.round(s/86400)}d ago`;
-};
-
-// Slot each article into one of the site's five categories.
-const guessCat = (a) => {
-  const ex = (a.entities?.[0]?.exchange || "").toUpperCase();
-  const cy = (a.entities?.[0]?.country  || "").toLowerCase();
-  const t  = `${a.title} ${a.description || ""} ${a.snippet || ""}`.toLowerCase();
-  if (/bitcoin|crypto|ethereum|\bbtc\b|\beth\b|token|blockchain|stablecoin/.test(t)) return "Crypto";
-  if (ex.includes("JSE") || cy === "za" || /south africa|\brand\b|eskom|sarb|jse|johannesburg|load shedding/.test(t)) return "SA Economy";
-  if (/nasdaq|nyse/.test(ex) || /nasdaq|wall street|dow jones|s&p 500|\bnyse\b/.test(t)) return "NYSE";
-  return "Global";
-};
-
-// Map a Marketaux article to the shape the page's cards expect.
-const mapArticle = (a) => ({
-  id:    `mx-${a.uuid}`,
-  cat:   guessCat(a),
-  title: a.title,
-  dek:   a.description || a.snippet || "",
-  src:   a.source || "Marketaux",
-  time:  timeAgo(a.published_at),
-  read:  "",              // Marketaux doesn't give a read time
-  url:   a.url,           // real source link
-  image: a.image_url,
-});
-
 export default function NewsPage() {
   const [search,   setSearch]   = useState("");
   const [category, setCategory] = useState("All");
@@ -122,13 +86,7 @@ export default function NewsPage() {
   },[]);
 
   // Live headlines (Marketaux). Falls back silently to the sample stories.
-  useEffect(()=>{
-    if (!MARKETAUX_KEY) return;
-    fetch(`https://api.marketaux.com/v1/news/all?language=en&filter_entities=true&limit=3&api_token=${MARKETAUX_KEY}`)
-      .then(r=>r.json())
-      .then(d=>{ if (Array.isArray(d?.data) && d.data.length) setLive(d.data.map(mapArticle)); })
-      .catch(()=>{});
-  },[]);
+  useEffect(()=>{ fetchLiveNews(3).then(a=>{ if (a.length) setLive(a); }); },[]);
 
   // Live articles lead; sample stories fill out the grid (and cover the free tier's 3-article cap).
   const allArticles = live.length ? [...live, ...ARTICLES] : ARTICLES;
