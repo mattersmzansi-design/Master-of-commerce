@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
+import { fetchLiveFixtures } from "../lib/soccer";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
@@ -34,12 +35,18 @@ export default function BettingPage() {
   const [mode,         setMode]         = useState("accumulator");
   const [placed,       setPlaced]       = useState(false);
   const [expanded,     setExpanded]     = useState({});
+  const [live,         setLive]         = useState([]);
 
-  const leagues = ["All",...[...new Set(FIXTURES.map(f=>f.league))]];
+  // Live fixtures + 1X2 odds (The Odds API). Falls back to the sample fixtures.
+  useEffect(()=>{ fetchLiveFixtures().then(f=>{ if (f.length) setLive(f); }); },[]);
+
+  const source = live.length ? live : FIXTURES;
+
+  const leagues = ["All",...[...new Set(source.map(f=>f.league))]];
 
   const filtered = useMemo(()=>
-    leagueFilter==="All" ? FIXTURES : FIXTURES.filter(f=>f.league===leagueFilter)
-  ,[leagueFilter]);
+    leagueFilter==="All" ? source : source.filter(f=>f.league===leagueFilter)
+  ,[leagueFilter, source]);
 
   const grouped = useMemo(()=>
     GROUPS.map(g=>({group:g,items:filtered.filter(f=>f.group===g)})).filter(g=>g.items.length)
@@ -157,26 +164,32 @@ export default function BettingPage() {
                             <Btn label="Draw" odds={f.odds.d} market="1X2" k="d"/>
                             <Btn label="Away" odds={f.odds.a} market="1X2" k="a"/>
                           </div>
-                          <button onClick={()=>setExpanded(e=>({...e,[f.id]:!e[f.id]}))}
-                            style={{fontFamily:SANS,fontSize:11,fontWeight:600,color:C.blue}}>
-                            {exp?"Fewer markets ▴":"More markets ▾"}
-                          </button>
-                          {exp && (
+                          {(f.ou || f.btts) && (
+                            <button onClick={()=>setExpanded(e=>({...e,[f.id]:!e[f.id]}))}
+                              style={{fontFamily:SANS,fontSize:11,fontWeight:600,color:C.blue}}>
+                              {exp?"Fewer markets ▴":"More markets ▾"}
+                            </button>
+                          )}
+                          {exp && (f.ou || f.btts) && (
                             <div style={{marginTop:12,paddingTop:12,borderTop:`1px solid ${C.rule2}`,display:"flex",flexDirection:"column",gap:10}}>
-                              <div>
-                                <div style={{fontFamily:MONO,fontSize:9,textTransform:"uppercase",letterSpacing:".07em",color:C.muted,marginBottom:6}}>Over/Under 2.5 Goals</div>
-                                <div style={{display:"flex",gap:6}}>
-                                  <Btn label="Over" odds={f.ou.o} market="O/U" k="o"/>
-                                  <Btn label="Under" odds={f.ou.u} market="O/U" k="u"/>
+                              {f.ou && (
+                                <div>
+                                  <div style={{fontFamily:MONO,fontSize:9,textTransform:"uppercase",letterSpacing:".07em",color:C.muted,marginBottom:6}}>Over/Under 2.5 Goals</div>
+                                  <div style={{display:"flex",gap:6}}>
+                                    <Btn label="Over" odds={f.ou.o} market="O/U" k="o"/>
+                                    <Btn label="Under" odds={f.ou.u} market="O/U" k="u"/>
+                                  </div>
                                 </div>
-                              </div>
-                              <div>
-                                <div style={{fontFamily:MONO,fontSize:9,textTransform:"uppercase",letterSpacing:".07em",color:C.muted,marginBottom:6}}>Both Teams to Score</div>
-                                <div style={{display:"flex",gap:6}}>
-                                  <Btn label="Yes" odds={f.btts.y} market="BTTS" k="y"/>
-                                  <Btn label="No"  odds={f.btts.n} market="BTTS" k="n"/>
+                              )}
+                              {f.btts && (
+                                <div>
+                                  <div style={{fontFamily:MONO,fontSize:9,textTransform:"uppercase",letterSpacing:".07em",color:C.muted,marginBottom:6}}>Both Teams to Score</div>
+                                  <div style={{display:"flex",gap:6}}>
+                                    <Btn label="Yes" odds={f.btts.y} market="BTTS" k="y"/>
+                                    <Btn label="No"  odds={f.btts.n} market="BTTS" k="n"/>
+                                  </div>
                                 </div>
-                              </div>
+                              )}
                             </div>
                           )}
                         </div>
@@ -266,7 +279,7 @@ export default function BettingPage() {
 
               <div style={{padding:"12px 18px",borderTop:`1px solid ${C.rule}`}}>
                 <div style={{fontFamily:MONO,fontSize:9,color:C.dim,lineHeight:1.7}}>
-                  18+ only. Odds are illustrative — a real provider is planned for Phase 3.<br/>
+                  18+ only. Live odds via The Odds API; sample odds shown when unavailable. Not a bookmaker — no real bets.<br/>
                   National Responsible Gambling Programme:<br/>
                   <span style={{color:C.muted}}>0800 006 008</span> (toll-free, 24/7)
                 </div>
@@ -276,7 +289,7 @@ export default function BettingPage() {
         </div>
       </section>
 
-      <Footer note="Odds are illustrative and for demonstration only">
+      <Footer note="Live odds via The Odds API — informational only, not a bookmaker">
         <div style={{fontFamily:MONO,fontSize:10,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>
           18+ only. Gambling can be addictive — please play responsibly.<br/>
           National Responsible Gambling Programme: 0800 006 008 (toll-free, 24/7)
