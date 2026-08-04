@@ -18,14 +18,16 @@ export default function Nav() {
     <header style={{ background:C.paper, borderBottom:`2px solid ${C.ink}` }}>
       {/* Masthead */}
       <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"16px 28px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-end", flexWrap:"wrap", gap:12, borderBottom:`1px solid ${C.rule}` }}>
-        <Link to="/" style={{ display:"flex", alignItems:"center", gap:14 }}>
+        <Link to="/" style={{ display:"flex", alignItems:"center", gap:12 }}>
           <img src="/logo-mark.png" alt="Master of Commerce logo"
             style={{ width:54, height:54, borderRadius:13, objectFit:"cover", objectPosition:"center 12%", flexShrink:0, boxShadow:"0 2px 8px rgba(1,32,48,.18)" }} />
-          <div style={{ display:"flex", flexDirection:"column", lineHeight:1 }}>
-            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(19px,3.2vw,27px)", color:C.ink, letterSpacing:".005em", textTransform:"uppercase" }}>
+          <div style={{ display:"flex", flexDirection:"column", lineHeight:1,
+            background:"radial-gradient(130% 150% at 28% 28%, #FBC02D 0%, #F7941E 44%, #F24E01 100%)",
+            borderRadius:13, padding:"9px 18px", boxShadow:"0 2px 8px rgba(1,32,48,.18)" }}>
+            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(18px,3vw,26px)", color:"#fff", letterSpacing:".005em", textTransform:"uppercase" }}>
               Master of Commerce
             </span>
-            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(9px,1.1vw,11px)", color:C.cyan, letterSpacing:".32em", textTransform:"uppercase", marginTop:5 }}>
+            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(9px,1.1vw,10.5px)", color:C.cyan, letterSpacing:".30em", textTransform:"uppercase", marginTop:5 }}>
               Markets · News · Data
             </span>
           </div>
