@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
+import { fetchLiveNews } from "../lib/marketaux";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
@@ -80,15 +81,21 @@ export default function Home() {
   const [crypto, setCrypto]   = useState([]);
   const [mktTab, setMktTab]   = useState("JSE");
   const [picks, setPicks]     = useState({});
+  const [live, setLive]       = useState([]);
 
   useEffect(() => {
     fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=6&page=1&sparkline=false&price_change_percentage=24h")
       .then(r => r.json()).then(d => Array.isArray(d) && setCrypto(d)).catch(() => {});
   }, []);
 
-  const featuredArticle = NEWS.find(a => a.featured);
-  const sideArticles    = NEWS.filter(a => !a.featured).slice(0,3);
-  const bottomArticles  = NEWS.filter(a => !a.featured).slice(3);
+  // Live headlines (Marketaux). Falls back silently to the sample stories.
+  useEffect(() => { fetchLiveNews(3).then(a => { if (a.length) setLive(a); }); }, []);
+
+  const newsList        = live.length ? [...live, ...NEWS] : NEWS;
+  const featuredArticle = live.length ? { ...live[0], featured:true } : NEWS.find(a => a.featured);
+  const otherArticles   = newsList.filter(a => a.id !== featuredArticle.id);
+  const sideArticles    = otherArticles.slice(0,3);
+  const bottomArticles  = otherArticles.slice(3,5);
 
   const btc = crypto.find(c => c.id==="bitcoin");
   const eth = crypto.find(c => c.id==="ethereum");
@@ -145,7 +152,9 @@ export default function Home() {
                 <span style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".06em" }}>{featuredArticle.src}</span>
                 <span style={{ color:C.rule }}>·</span>
                 <span style={{ fontFamily:MONO, fontSize:10, color:C.muted }}>{featuredArticle.time}</span>
-                <Link to="/news" style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</Link>
+                {featuredArticle.url
+                  ? <a href={featuredArticle.url} target="_blank" rel="noopener noreferrer" style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</a>
+                  : <Link to="/news" style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</Link>}
               </div>
             </div>
           )}
@@ -153,26 +162,34 @@ export default function Home() {
           {/* Side stories */}
           <div>
             <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", fontWeight:700, marginBottom:14, paddingBottom:8, borderBottom:`1px solid ${C.rule}` }}>Also in Today's Brief</div>
-            {sideArticles.map((a,i) => (
-              <div key={a.id} style={{ paddingBottom:14, marginBottom:14, borderBottom: i<sideArticles.length-1 ? `1px solid ${C.rule2}` : "none" }}>
-                <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
-                <h3 style={{ fontFamily:SERIF, fontSize:15, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:5 }}>{a.title}</h3>
-                <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek}</p>
-              </div>
-            ))}
+            {sideArticles.map((a,i) => {
+              const Tag = a.url ? "a" : "div";
+              const lp = a.url ? { href:a.url, target:"_blank", rel:"noopener noreferrer" } : {};
+              return (
+                <Tag key={a.id} {...lp} style={{ display:"block", paddingBottom:14, marginBottom:14, borderBottom: i<sideArticles.length-1 ? `1px solid ${C.rule2}` : "none" }}>
+                  <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
+                  <h3 style={{ fontFamily:SERIF, fontSize:15, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:5 }}>{a.title}</h3>
+                  <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek}</p>
+                </Tag>
+              );
+            })}
             <Link to="/news" style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>All business news →</Link>
           </div>
         </div>
 
         {/* bottom article row */}
         <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, paddingTop:28, paddingBottom:28, marginTop:12, borderTop:`1px solid ${C.rule}` }}>
-          {bottomArticles.map(a => (
-            <div key={a.id}>
+          {bottomArticles.map(a => {
+            const Tag = a.url ? "a" : "div";
+            const lp = a.url ? { href:a.url, target:"_blank", rel:"noopener noreferrer" } : {};
+            return (
+            <Tag key={a.id} {...lp} style={{ display:"block" }}>
               <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
               <h4 style={{ fontFamily:SERIF, fontSize:14, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:4 }}>{a.title}</h4>
               <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek.slice(0,90)}…</p>
-            </div>
-          ))}
+            </Tag>
+            );
+          })}
         </div>
       </section>
 
