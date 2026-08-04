@@ -72,19 +72,68 @@ const SNAPSHOT = [
   { label:"NYSE Composite",value:"19,872", chg:0.89 },
 ];
 
+// ─── Live news via Marketaux ──────────────────────────────────────────────────
+// Key comes from the VITE_MARKETAUX_KEY env var (never hard-coded / committed).
+// If it's missing or the request fails, the page falls back to the sample stories.
+const MARKETAUX_KEY = import.meta.env.VITE_MARKETAUX_KEY;
+
+const timeAgo = (iso) => {
+  const s = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (!isFinite(s) || s < 0) return "just now";
+  if (s < 3600)  return `${Math.max(1, Math.round(s/60))}m ago`;
+  if (s < 86400) return `${Math.round(s/3600)}h ago`;
+  return `${Math.round(s/86400)}d ago`;
+};
+
+// Slot each article into one of the site's five categories.
+const guessCat = (a) => {
+  const ex = (a.entities?.[0]?.exchange || "").toUpperCase();
+  const cy = (a.entities?.[0]?.country  || "").toLowerCase();
+  const t  = `${a.title} ${a.description || ""} ${a.snippet || ""}`.toLowerCase();
+  if (/bitcoin|crypto|ethereum|\bbtc\b|\beth\b|token|blockchain|stablecoin/.test(t)) return "Crypto";
+  if (ex.includes("JSE") || cy === "za" || /south africa|\brand\b|eskom|sarb|jse|johannesburg|load shedding/.test(t)) return "SA Economy";
+  if (/nasdaq|nyse/.test(ex) || /nasdaq|wall street|dow jones|s&p 500|\bnyse\b/.test(t)) return "NYSE";
+  return "Global";
+};
+
+// Map a Marketaux article to the shape the page's cards expect.
+const mapArticle = (a) => ({
+  id:    `mx-${a.uuid}`,
+  cat:   guessCat(a),
+  title: a.title,
+  dek:   a.description || a.snippet || "",
+  src:   a.source || "Marketaux",
+  time:  timeAgo(a.published_at),
+  read:  "",              // Marketaux doesn't give a read time
+  url:   a.url,           // real source link
+  image: a.image_url,
+});
+
 export default function NewsPage() {
   const [search,   setSearch]   = useState("");
   const [category, setCategory] = useState("All");
   const [visible,  setVisible]  = useState(6);
   const [coins,    setCoins]    = useState([]);
+  const [live,     setLive]     = useState([]);
 
   useEffect(()=>{
     fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=4&page=1&sparkline=false&price_change_percentage=24h")
       .then(r=>r.json()).then(d=>Array.isArray(d)&&setCoins(d)).catch(()=>{});
   },[]);
 
-  const featured   = ARTICLES.find(a=>a.featured);
-  const rest       = ARTICLES.filter(a=>!a.featured);
+  // Live headlines (Marketaux). Falls back silently to the sample stories.
+  useEffect(()=>{
+    if (!MARKETAUX_KEY) return;
+    fetch(`https://api.marketaux.com/v1/news/all?language=en&filter_entities=true&limit=3&api_token=${MARKETAUX_KEY}`)
+      .then(r=>r.json())
+      .then(d=>{ if (Array.isArray(d?.data) && d.data.length) setLive(d.data.map(mapArticle)); })
+      .catch(()=>{});
+  },[]);
+
+  // Live articles lead; sample stories fill out the grid (and cover the free tier's 3-article cap).
+  const allArticles = live.length ? [...live, ...ARTICLES] : ARTICLES;
+  const featured    = live.length ? { ...live[0], featured:true } : ARTICLES.find(a=>a.featured);
+  const rest        = allArticles.filter(a=>a.id !== featured.id);
 
   const filtered = useMemo(()=>{
     let base = category==="All" ? rest : rest.filter(a=>a.cat===category);
@@ -160,14 +209,16 @@ export default function NewsPage() {
                     {featured.title}
                   </h2>
                   <div style={{display:"flex",gap:12,fontFamily:MONO,fontSize:9,color:C.muted,textTransform:"uppercase",letterSpacing:".07em"}}>
-                    <span>{featured.src}</span><span>·</span><span>{featured.time}</span><span>·</span><span>{featured.read} read</span>
+                    <span>{featured.src}</span><span>·</span><span>{featured.time}</span>{featured.read && <><span>·</span><span>{featured.read} read</span></>}
                   </div>
                 </div>
                 <div>
                   <p style={{fontFamily:SERIF,fontStyle:"italic",fontSize:16,lineHeight:1.7,color:C.muted}}>
                     {featured.dek}
                   </p>
-                  <Link to="/news" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</Link>
+                  {featured.url
+                    ? <a href={featured.url} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</a>
+                    : <Link to="/news" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</Link>}
                 </div>
               </div>
             )}
@@ -262,7 +313,7 @@ export default function NewsPage() {
             <div style={{border:`1px solid ${C.rule}`,background:C.paper,padding:"14px 16px"}}>
               <div style={{fontFamily:MONO,fontSize:9,color:C.muted,textTransform:"uppercase",letterSpacing:".08em",marginBottom:8}}>Editorial Note</div>
               <p style={{fontFamily:SERIF,fontStyle:"italic",fontSize:12,color:C.muted,lineHeight:1.65}}>
-                These stories are curated examples. Live wire integration via NewsAPI is planned for Phase 3, once we have a backend to keep the API key secure.
+                Top headlines are pulled live from the Marketaux financial news wire, complemented by curated stories. Tap a headline to read the full report at the source.
               </p>
             </div>
           </aside>
@@ -276,8 +327,10 @@ export default function NewsPage() {
 
 function ArticleCard({ article, size, catColor }) {
   const isLarge = size === "large";
+  const Tag = article.url ? "a" : "div";
+  const linkProps = article.url ? { href:article.url, target:"_blank", rel:"noopener noreferrer" } : {};
   return (
-    <div style={{background:C.paper,padding: isLarge ? "20px 22px" : "16px 18px",cursor:"pointer"}}
+    <Tag {...linkProps} style={{display:"block",background:C.paper,padding: isLarge ? "20px 22px" : "16px 18px",cursor:"pointer"}}
       onMouseEnter={e=>e.currentTarget.style.background="#FFF3E5"}
       onMouseLeave={e=>e.currentTarget.style.background=C.paper}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:isLarge?10:8}}>
@@ -289,8 +342,8 @@ function ArticleCard({ article, size, catColor }) {
       </h3>
       {isLarge && <p style={{fontFamily:SANS,fontSize:13,color:C.muted,lineHeight:1.6,marginBottom:10}}>{article.dek}</p>}
       <div style={{display:"flex",gap:10,fontFamily:MONO,fontSize:9,color:C.dim,textTransform:"uppercase",letterSpacing:".06em"}}>
-        <span>{article.src}</span><span>·</span><span>{article.read} read</span>
+        <span>{article.src}</span>{article.read && <><span>·</span><span>{article.read} read</span></>}
       </div>
-    </div>
+    </Tag>
   );
 }
