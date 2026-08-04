@@ -17,15 +17,19 @@ export default function Nav() {
   return (
     <header style={{ background:C.paper, borderBottom:`2px solid ${C.ink}` }}>
       {/* Masthead */}
-      <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"18px 28px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-end", borderBottom:`1px solid ${C.rule}` }}>
-        <div>
-          <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, letterSpacing:".1em", textTransform:"uppercase", marginBottom:6 }}>Est. 2026 · South Africa & The World</div>
-          <Link to="/" style={{ display:"block" }}>
-            <h1 style={{ fontFamily:SERIF, fontSize:"clamp(26px,3.5vw,40px)", fontWeight:700, color:C.ink, letterSpacing:"-.01em", lineHeight:1 }}>
+      <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"16px 28px 14px", display:"flex", justifyContent:"space-between", alignItems:"flex-end", flexWrap:"wrap", gap:12, borderBottom:`1px solid ${C.rule}` }}>
+        <Link to="/" style={{ display:"flex", alignItems:"center", gap:14 }}>
+          <img src="/logo-mark.png" alt="Master of Commerce logo"
+            style={{ width:54, height:54, borderRadius:13, objectFit:"cover", objectPosition:"center 12%", flexShrink:0, boxShadow:"0 2px 8px rgba(1,32,48,.18)" }} />
+          <div style={{ display:"flex", flexDirection:"column", lineHeight:1 }}>
+            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(19px,3.2vw,27px)", color:C.ink, letterSpacing:".005em", textTransform:"uppercase" }}>
               Master of Commerce
-            </h1>
-          </Link>
-        </div>
+            </span>
+            <span style={{ fontFamily:SANS, fontWeight:800, fontSize:"clamp(9px,1.1vw,11px)", color:C.cyan, letterSpacing:".32em", textTransform:"uppercase", marginTop:5 }}>
+              Markets · News · Data
+            </span>
+          </div>
+        </Link>
         <div style={{ textAlign:"right" }}>
           <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, marginBottom:8, letterSpacing:".04em" }}>{today}</div>
           <div style={{ display:"flex", gap:10 }}>

@@ -14,7 +14,14 @@ export default function Footer({ note, children }) {
       <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"48px 28px 0" }}>
         <div className="mc-footer" style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(4,1fr)", gap:32 }}>
           <div className="mc-footer-brand">
-            <h2 style={{ fontFamily:SERIF, fontSize:22, fontWeight:700, marginBottom:10 }}>Master of Commerce</h2>
+            <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
+              <img src="/logo-mark.png" alt="Master of Commerce logo"
+                style={{ width:46, height:46, borderRadius:11, objectFit:"cover", objectPosition:"center 12%", flexShrink:0 }} />
+              <div style={{ display:"flex", flexDirection:"column", lineHeight:1 }}>
+                <span style={{ fontFamily:SANS, fontWeight:800, fontSize:17, letterSpacing:".005em", textTransform:"uppercase" }}>Master of Commerce</span>
+                <span style={{ fontFamily:SANS, fontWeight:800, fontSize:9, color:C.cyan, letterSpacing:".28em", textTransform:"uppercase", marginTop:4 }}>Markets · News · Data</span>
+              </div>
+            </div>
             <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:200 }}>Your daily brief for global markets, live data and soccer betting.</p>
           </div>
           {COLS.map(col => (
