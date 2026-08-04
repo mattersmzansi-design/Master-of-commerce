@@ -18,7 +18,7 @@ export default function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/nyse" element={<NYSE />} />
         <Route path="/jse" element={
-          <ComingSoon title="JSE Stocks" blurb="Live Johannesburg Stock Exchange data coming soon — contact Profile Data (profiledata.co.za) or Trading Economics for a data feed, then we wire it straight in." />
+          <ComingSoon title="JSE Stocks" blurb="Live Johannesburg Stock Exchange data is coming soon." />
         } />
         <Route path="*" element={
           <ComingSoon title="Page not found" blurb="That page doesn't exist yet." />
