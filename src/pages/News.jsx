@@ -15,7 +15,7 @@ const CAT_STYLE = {
   "Global":     { color:C.amber,  border:"1px solid #8C5F00" },
 };
 
-const ARTICLES = [
+export const ARTICLES = [
   { id:1,  cat:"SA Economy", featured:true,
     title:"SARB Holds Rate Steady at 8.25% as Rand Strengthens on Improving Current Account",
     dek:"The Monetary Policy Committee voted 5–2 to hold, with the minority advocating a 25bp cut. Governor Kganyago cited persistent services inflation and global uncertainty as reasons for caution.",

@@ -12,7 +12,7 @@ const AV_BASE = "https://www.alphavantage.co/query";
 // ─── mock data ───────────────────────────────────────────────────────────────
 const SECTORS = ["Technology","Finance","Healthcare","Consumer","Energy","Industrial"];
 
-const MOCK_STOCKS = [
+export const MOCK_STOCKS = [
   { symbol:"AAPL",  name:"Apple Inc.",            sector:"Technology",  price:213.45, chg:0.89,  chgAmt:1.88,  open:212.10, high:214.80, low:211.90, vol:58200000,  mktCap:3280000000000, pe:34.2, wk52h:237.23, wk52l:164.08, desc:"Consumer electronics, software and online services. Maker of iPhone, Mac, iPad and Apple Watch." },
   { symbol:"MSFT",  name:"Microsoft Corp.",        sector:"Technology",  price:428.30, chg:1.24,  chgAmt:5.24,  open:424.90, high:429.50, low:423.10, vol:22100000,  mktCap:3180000000000, pe:36.8, wk52h:468.35, wk52l:349.67, desc:"Cloud computing (Azure), enterprise software (Office 365), gaming (Xbox) and AI infrastructure." },
   { symbol:"NVDA",  name:"NVIDIA Corp.",           sector:"Technology",  price:875.60, chg:3.21,  chgAmt:27.23, open:852.40, high:879.20, low:850.10, vol:41500000,  mktCap:2150000000000, pe:69.4, wk52h:974.00, wk52l:395.58, desc:"Graphics processors, AI accelerators and data centre computing. Dominant supplier of AI training chips." },

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 // ─── data ────────────────────────────────────────────────────────────────────
 
-const EVENTS = [
+export const EVENTS = [
   // TODAY
   { id:1,  group:"Today",       date:"Mon 23 Jun", time:"08:00", flag:"🇿🇦", country:"ZA", event:"SA Inflation Rate (May)",              category:"Inflation",      impact:"high",   prev:"4.7%",  forecast:"4.8%",  actual:"4.9%",   note:"CPI came in above forecast, driven by food and fuel prices. The rand weakened slightly on the print." },
   { id:2,  group:"Today",       date:"Mon 23 Jun", time:"10:30", flag:"🇿🇦", country:"ZA", event:"SA Retail Sales (Apr)",                category:"Retail",         impact:"medium", prev:"-0.8%", forecast:"0.4%",  actual:"0.6%",   note:"Retail sales bounced back in April as fuel prices eased and consumer confidence improved marginally." },

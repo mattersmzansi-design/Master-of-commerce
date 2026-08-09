@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { C, SANS } from "../theme";
+import { search } from "../lib/searchIndex.js";
 
 const BRAND_GRAD = "radial-gradient(130% 150% at 28% 28%, #FBC02D 0%, #F7941E 46%, #F24E01 100%)";
 
@@ -84,15 +85,20 @@ function Badge({ fill = false }) {
 
 export default function Nav() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [menuOpen,   setMenuOpen]   = useState(false);
   const [subOpen,    setSubOpen]    = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [query,      setQuery]      = useState("");
   const [email,      setEmail]      = useState("");
   const [status,     setStatus]     = useState("idle"); // idle | sending | ok | err
 
   function openSub()    { setSubOpen(o => !o);    setMenuOpen(false); setSearchOpen(false); }
   function openMenu()   { setMenuOpen(o => !o);   setSubOpen(false);  setSearchOpen(false); }
   function openSearch() { setSearchOpen(o => !o); setSubOpen(false);  setMenuOpen(false); }
+
+  const results = useMemo(() => search(query, 10), [query]);
+  function pickResult(path) { setSearchOpen(false); setQuery(""); navigate(path); }
 
   async function subscribe(e) {
     e.preventDefault();
@@ -166,16 +172,53 @@ export default function Nav() {
             <div style={{ flex:1, height:44, border:`1.5px solid ${C.rule}`, borderRadius:12, background:"#FBF6EF",
               display:"flex", alignItems:"center", gap:9, padding:"0 14px" }}>
               <GlassIcon/>
-              <input autoFocus placeholder="Search markets, tickers, news…" aria-label="Search"
+              <input autoFocus value={query} onChange={e => setQuery(e.target.value)}
+                placeholder="Search markets, tickers, news…" aria-label="Search"
                 style={{ flex:1, height:"100%", border:"none", background:"transparent", outline:"none",
                   fontFamily:SANS, fontSize:14, color:C.ink }} />
             </div>
-            <button onClick={() => setSearchOpen(false)} aria-label="Close search"
+            <button onClick={() => { setSearchOpen(false); setQuery(""); }} aria-label="Close search"
               style={{ height:44, padding:"0 14px", border:`1.5px solid ${C.rule}`, borderRadius:12,
                 background:"#fff", fontFamily:SANS, fontWeight:600, fontSize:13, color:C.muted }}>
               Close
             </button>
           </div>
+          {query.trim() && (
+            <div style={{ padding:"0 14px 14px" }}>
+              {results.length === 0 ? (
+                <div style={{ fontFamily:SANS, fontSize:13, color:C.muted, padding:"8px 4px" }}>
+                  No matches for "{query}".
+                </div>
+              ) : (
+                <ul style={{ listStyle:"none", padding:0, margin:0, border:`1px solid ${C.rule2}`, borderRadius:12, overflow:"hidden", background:C.paper }}>
+                  {results.map((r, i) => (
+                    <li key={i}>
+                      <button onClick={() => pickResult(r.path)} style={{
+                        width:"100%", textAlign:"left", background:"transparent", border:"none",
+                        padding:"11px 14px", borderBottom: i < results.length-1 ? `1px solid ${C.rule2}` : "none",
+                        display:"flex", alignItems:"center", gap:12, cursor:"pointer",
+                      }}>
+                        <span style={{ flex:1, minWidth:0 }}>
+                          <span style={{ display:"block", fontFamily:SANS, fontWeight:600, fontSize:13.5, color:C.ink,
+                            whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                            {r.title}
+                          </span>
+                          <span style={{ display:"block", fontFamily:SANS, fontSize:12, color:C.muted, marginTop:2,
+                            whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                            {r.subtitle}
+                          </span>
+                        </span>
+                        <span style={{ fontFamily:SANS, fontWeight:700, fontSize:10, color:C.cyan,
+                          textTransform:"uppercase", letterSpacing:".08em", flexShrink:0 }}>
+                          {r.kind}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
         </div>
       )}
 
