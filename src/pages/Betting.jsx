@@ -13,7 +13,7 @@ const LEAGUE_COLOR = {
 
 const GROUPS = ["Live Now","Today","Tomorrow","This Weekend"];
 
-const FIXTURES = [
+export const FIXTURES = [
   { id:1,  league:"PSL",            home:"Mamelodi Sundowns", away:"Orlando Pirates",    group:"Live Now",    kickoff:"LIVE", liveMin:67, score:{h:1,a:1}, odds:{h:2.40,d:2.80,a:3.60}, ou:{o:1.95,u:1.85}, btts:{y:1.70,n:2.05} },
   { id:2,  league:"Premier League", home:"Liverpool",         away:"Chelsea",            group:"Live Now",    kickoff:"LIVE", liveMin:23, score:{h:0,a:0}, odds:{h:1.95,d:3.30,a:4.10}, ou:{o:1.80,u:2.00}, btts:{y:1.65,n:2.15} },
   { id:3,  league:"PSL",            home:"Kaizer Chiefs",     away:"SuperSport United",  group:"Today",       kickoff:"19:30", odds:{h:2.10,d:3.10,a:3.50}, ou:{o:1.90,u:1.90}, btts:{y:1.75,n:2.00} },
