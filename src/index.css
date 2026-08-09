@@ -40,7 +40,11 @@ input::placeholder { color: #8ABCCA; }
 
 /* Tablet and below: collapse multi-column layouts into a single column,
    and drop the column-divider padding/border that only makes sense side-by-side. */
+.mc-mob-only  { display: none !important; }
+.mc-desk-only { display: flex !important; }
 @media (max-width: 860px) {
+  .mc-mob-only  { display: flex !important; }
+  .mc-desk-only { display: none !important; }
   .mc-collapse { grid-template-columns: 1fr !important; gap: 24px !important; }
   .mc-collapse > * {
     padding-right: 0 !important;
