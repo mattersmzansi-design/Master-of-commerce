@@ -1,9 +1,11 @@
-# Master of Commerce — project brief
+# Mzansi Money Matters — project brief
 
-> **Codename: Genesis** 🧬 — named after the Bitcoin genesis block (block 0,
-> mined 3 Jan 2009), the origin every other block is built on. This platform is
-> the owner's genesis too: the first block of something bigger. Public name of
-> the site stays **Master of Commerce**; "Genesis" is the project's own name.
+> **Public name: Mzansi Money Matters** (live at www.mzansimoneymatters.co.za) —
+> matches the logo and domains. The old placeholder name "Master of Commerce" has
+> been retired. **Codename: Genesis** 🧬 — after the Bitcoin genesis block (block 0,
+> mined 3 Jan 2009), the origin every other block is built on: the owner's genesis,
+> the first block of something bigger. The git repo folder is still named
+> `Master-of-commerce` (repo rename is optional/cosmetic).
 
 A Vite + React (React Router) finance site for South Africa & global markets:
 business news, JSE (coming soon), NYSE, crypto, an economic calendar, and soccer

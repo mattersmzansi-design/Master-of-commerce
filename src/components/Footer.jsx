@@ -15,10 +15,10 @@ export default function Footer({ note, children }) {
         <div className="mc-footer" style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(4,1fr)", gap:32 }}>
           <div className="mc-footer-brand">
             <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
-              <img src="/logo-mark.png" alt="Master of Commerce logo"
+              <img src="/logo-mark.png" alt="Mzansi Money Matters logo"
                 style={{ width:46, height:46, borderRadius:11, objectFit:"cover", objectPosition:"center 12%", flexShrink:0 }} />
               <div style={{ display:"flex", flexDirection:"column", lineHeight:1 }}>
-                <span style={{ fontFamily:SANS, fontWeight:800, fontSize:17, letterSpacing:".005em", textTransform:"uppercase" }}>Master of Commerce</span>
+                <span style={{ fontFamily:SANS, fontWeight:800, fontSize:16, letterSpacing:".005em", textTransform:"uppercase" }}>Mzansi Money Matters</span>
                 <span style={{ fontFamily:SANS, fontWeight:800, fontSize:9, color:C.cyan, letterSpacing:".28em", textTransform:"uppercase", marginTop:4 }}>Markets · News · Data</span>
               </div>
             </div>
@@ -39,7 +39,7 @@ export default function Footer({ note, children }) {
           <div style={{ paddingBottom:24, textAlign:"center" }}>{children}</div>
         )}
         <div style={{ paddingBottom:24, display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
-          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>© 2026 Master of Commerce. Financial data for informational purposes only.</div>
+          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>© 2026 Mzansi Money Matters. Financial data for informational purposes only.</div>
           <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>{note || "Crypto prices via CoinGecko API"}</div>
         </div>
       </div>
