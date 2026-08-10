@@ -31,6 +31,8 @@
 - **Bundle size** — >500kb single JS chunk (build warns). Code-splitting per route will speed up first paint on 3G.
 - **Analytics & error tracking** — No Google Analytics / Plausible / Sentry yet. We're flying blind on traffic and crashes.
 - **Legal footer** — No T&Cs, privacy notice, or POPIA/GDPR cookie disclosure yet — required before we drive real traffic.
+- **Contact details** — No contact page, footer email/WhatsApp, or socials yet. Quick win; needs owner to decide what to expose (email only, or WhatsApp / Instagram / X too?).
+- **Embedded widgets** — No TradingView charts on JSE/NYSE/Crypto yet, no YouTube analysis videos, no live X/Twitter finance feed. All are free-to-embed and would make the pages feel much more alive.
 
 ## Next up (my picks)
 
