@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { C, SANS } from "../theme";
 import { search } from "../lib/searchIndex.js";
+import { SUBSTACK_SUBSCRIBE_URL } from "../lib/substack.js";
 
 const BRAND_GRAD = "radial-gradient(130% 150% at 28% 28%, #FBC02D 0%, #F7941E 46%, #F24E01 100%)";
 
@@ -22,9 +23,8 @@ const SQUARE = {
   display:"inline-flex", alignItems:"center", justifyContent:"center",
 };
 
-// Free form-to-email relay: each signup lands in the site inbox as an email.
-// Swap this endpoint for a Mailchimp/Buttondown URL when the list outgrows it.
-const SIGNUP_URL = "https://formsubmit.co/ajax/mattersmzansi@gmail.com";
+// Subscriptions flow through Ntokozo's Substack — one list, one place to
+// write, one place to send from. Overrides the earlier FormSubmit relay.
 
 function BurgerIcon() {
   return (
@@ -87,42 +87,27 @@ export default function Nav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [menuOpen,   setMenuOpen]   = useState(false);
-  const [subOpen,    setSubOpen]    = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query,      setQuery]      = useState("");
-  const [email,      setEmail]      = useState("");
-  const [status,     setStatus]     = useState("idle"); // idle | sending | ok | err
 
-  function openSub()    { setSubOpen(o => !o);    setMenuOpen(false); setSearchOpen(false); }
-  function openMenu()   { setMenuOpen(o => !o);   setSubOpen(false);  setSearchOpen(false); }
-  function openSearch() { setSearchOpen(o => !o); setSubOpen(false);  setMenuOpen(false); }
+  function openMenu()   { setMenuOpen(o => !o);   setSearchOpen(false); }
+  function openSearch() { setSearchOpen(o => !o); setMenuOpen(false); }
 
   const results = useMemo(() => search(query, 10), [query]);
-  function pickResult(path) { setSearchOpen(false); setQuery(""); navigate(path); }
-
-  async function subscribe(e) {
-    e.preventDefault();
-    if (!email.trim() || status === "sending") return;
-    setStatus("sending");
-    try {
-      const r = await fetch(SIGNUP_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          email,
-          _subject: "New Mzansi Money Matters newsletter signup",
-          _template: "table",
-          _captcha: "false",
-        }),
-      });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      await r.json();
-      setStatus("ok");
-      setEmail("");
-    } catch {
-      setStatus("err");
-    }
+  function pickResult(path) {
+    setSearchOpen(false); setQuery("");
+    if (/^https?:\/\//.test(path)) window.open(path, "_blank", "noopener,noreferrer");
+    else navigate(path);
   }
+
+  // Subscribe button = external link to Substack signup. Shared styles so
+  // the anchor looks identical to the previous <button>.
+  const subscribeProps = {
+    href: SUBSTACK_SUBSCRIBE_URL,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    "aria-label": "Subscribe on Substack",
+  };
 
   return (
     <header style={{ background:C.paper, borderBottom:`2px solid ${C.ink}` }}>
@@ -132,9 +117,9 @@ export default function Nav() {
           <BurgerIcon/>
         </button>
         <Badge fill/>
-        <button aria-label="Subscribe to the newsletter" aria-expanded={subOpen} onClick={openSub} style={SQUARE}>
+        <a {...subscribeProps} style={SQUARE}>
           <MailIcon/>
-        </button>
+        </a>
       </div>
 
       {/* Desktop masthead — full-bleed, badge in the left corner, subscribe in the right */}
@@ -157,12 +142,12 @@ export default function Nav() {
             display:"inline-flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
           <GlassIcon/>
         </button>
-        <button aria-label="Subscribe to the newsletter" aria-expanded={subOpen} onClick={openSub}
-          style={{ height:H, background:C.orange, border:"none", borderRadius:12, padding:"0 16px",
-            display:"inline-flex", alignItems:"center", gap:8, flexShrink:0 }}>
+        <a {...subscribeProps}
+          style={{ height:H, background:C.orange, borderRadius:12, padding:"0 16px",
+            display:"inline-flex", alignItems:"center", gap:8, flexShrink:0, textDecoration:"none" }}>
           <MailIcon size={19}/>
           <span style={{ fontFamily:SANS, fontWeight:700, fontSize:13.5, color:"#fff", whiteSpace:"nowrap" }}>Subscribe</span>
-        </button>
+        </a>
       </div>
 
       {/* Search panel — opens from the search icon on desktop */}
@@ -219,46 +204,6 @@ export default function Nav() {
               )}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Newsletter signup — opens from the ✉ button on both mobile and desktop */}
-      {subOpen && (
-        <div style={{ borderTop:`1px solid ${C.rule}`, background:C.paper }}>
-          <div style={{ padding:"16px 14px 20px" }}>
-            <div style={{ fontFamily:SANS, fontWeight:800, fontSize:15, color:C.ink, textTransform:"uppercase", letterSpacing:".03em" }}>
-              Get the newsletter
-            </div>
-            <div style={{ fontFamily:SANS, fontSize:12.5, color:C.muted, marginTop:3 }}>
-              Market news &amp; money matters in your inbox — free.
-            </div>
-            {status === "ok" ? (
-              <div style={{ fontFamily:SANS, fontWeight:700, fontSize:14, color:C.green, marginTop:12 }}>
-                ✓ You're on the list — thanks for subscribing!
-              </div>
-            ) : (
-              <form onSubmit={subscribe} style={{ display:"flex", gap:8, marginTop:12, maxWidth:520 }}>
-                <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="you@email.com" aria-label="Email address"
-                  style={{ flex:1, minWidth:0, height:46, border:`1.5px solid ${C.rule}`, borderRadius:12,
-                    padding:"0 14px", fontFamily:SANS, fontSize:14, color:C.ink, background:"#FFFDFA", outline:"none" }} />
-                <button type="submit" disabled={status === "sending"}
-                  style={{ background:C.orange, border:"none", borderRadius:12, height:46, padding:"0 18px",
-                    fontFamily:SANS, fontWeight:700, fontSize:14, color:"#fff", flexShrink:0,
-                    opacity: status === "sending" ? .6 : 1 }}>
-                  {status === "sending" ? "Sending…" : "Subscribe"}
-                </button>
-              </form>
-            )}
-            {status === "err" && (
-              <div style={{ fontFamily:SANS, fontSize:12.5, color:C.red, marginTop:8 }}>
-                Something went wrong — please try again, or email{" "}
-                <a href="mailto:mattersmzansi@gmail.com?subject=Subscribe" style={{ fontWeight:700, textDecoration:"underline" }}>
-                  mattersmzansi@gmail.com
-                </a>.
-              </div>
-            )}
-          </div>
         </div>
       )}
 
