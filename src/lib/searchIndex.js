@@ -57,7 +57,24 @@ const fixtures = FIXTURES.map(f => ({
   kind:     "Fixture",
 }));
 
-export const INDEX = [...PAGES, ...news, ...stocks, ...coins, ...events, ...fixtures];
+const BASE_INDEX = [...PAGES, ...news, ...stocks, ...coins, ...events, ...fixtures];
+let extras = []; // populated at runtime by dynamic sources (Substack, live news, …)
+
+export const INDEX = BASE_INDEX;
+
+// Merge a batch of runtime items into the searchable set. Call this once at
+// app start for each async source (see App.jsx). Deduped by title+path so
+// React StrictMode's double-invoked useEffects don't create duplicate results.
+export function addToIndex(items) {
+  const seen = new Set(extras.map(x => x.title + "|" + x.path));
+  for (const it of items) {
+    if (!it) continue;
+    const key = it.title + "|" + it.path;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    extras.push(it);
+  }
+}
 
 // Query: split on whitespace, every word must appear somewhere in title+subtitle
 // (case-insensitive). Ranks title-hits above subtitle-hits, and full-word
@@ -68,7 +85,7 @@ export function search(query, limit = 12) {
   const words = q.split(/\s+/);
 
   const scored = [];
-  for (const item of INDEX) {
+  for (const item of [...BASE_INDEX, ...extras]) {
     const title = item.title.toLowerCase();
     const sub   = item.subtitle.toLowerCase();
     let score = 0;

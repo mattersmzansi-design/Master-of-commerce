@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
 import { fetchLiveNews } from "../lib/marketaux";
+import { fetchSubstackPosts, SUBSTACK_URL } from "../lib/substack.js";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
@@ -79,6 +80,7 @@ export default function NewsPage() {
   const [visible,  setVisible]  = useState(6);
   const [coins,    setCoins]    = useState([]);
   const [live,     setLive]     = useState([]);
+  const [substack, setSubstack] = useState([]);
 
   useEffect(()=>{
     fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=4&page=1&sparkline=false&price_change_percentage=24h")
@@ -87,6 +89,9 @@ export default function NewsPage() {
 
   // Live headlines (Marketaux). Falls back silently to the sample stories.
   useEffect(()=>{ fetchLiveNews(3).then(a=>{ if (a.length) setLive(a); }); },[]);
+
+  // Owner's Substack posts. Empty on error — the section just hides.
+  useEffect(()=>{ fetchSubstackPosts().then(setSubstack); },[]);
 
   // Live articles lead; sample stories fill out the grid (and cover the free tier's 3-article cap).
   const allArticles = live.length ? [...live, ...ARTICLES] : ARTICLES;
@@ -177,6 +182,42 @@ export default function NewsPage() {
                   {featured.url
                     ? <a href={featured.url} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</a>
                     : <Link to="/news" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</Link>}
+                </div>
+              </div>
+            )}
+
+            {/* Ntokozo's Substack posts — the owner's own writing, front and centre */}
+            {showFeatured && substack.length > 0 && (
+              <div style={{marginBottom:26}}>
+                <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:12,marginBottom:12,paddingBottom:8,borderBottom:`1px solid ${C.rule}`}}>
+                  <h3 style={{fontFamily:SERIF,fontSize:20,fontWeight:700,color:C.ink,letterSpacing:"-.005em"}}>
+                    Ntokozo's take
+                  </h3>
+                  <a href={SUBSTACK_URL} target="_blank" rel="noopener noreferrer"
+                    style={{fontFamily:SANS,fontSize:11,fontWeight:700,color:C.blue,textTransform:"uppercase",letterSpacing:".08em",whiteSpace:"nowrap"}}>
+                    All posts on Substack →
+                  </a>
+                </div>
+                <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:1,background:C.rule,border:`1px solid ${C.rule}`}}>
+                  {substack.slice(0,3).map((p,i)=>(
+                    <a key={i} href={p.link} target="_blank" rel="noopener noreferrer"
+                      style={{background:C.paper,padding:"16px 18px",display:"flex",flexDirection:"column",gap:8,textDecoration:"none",color:"inherit"}}>
+                      <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,color:C.cyan,textTransform:"uppercase",letterSpacing:".1em"}}>
+                        Substack · {new Date(p.date).toLocaleDateString("en-ZA",{day:"numeric",month:"short"})}
+                      </div>
+                      <div style={{fontFamily:SERIF,fontSize:16,fontWeight:700,color:C.ink,lineHeight:1.25,letterSpacing:"-.005em"}}>
+                        {p.title}
+                      </div>
+                      {p.excerpt && (
+                        <div style={{fontFamily:SANS,fontSize:12.5,color:C.muted,lineHeight:1.5,display:"-webkit-box",WebkitLineClamp:3,WebkitBoxOrient:"vertical",overflow:"hidden"}}>
+                          {p.excerpt}
+                        </div>
+                      )}
+                      <div style={{marginTop:"auto",paddingTop:6,fontFamily:SANS,fontSize:11,fontWeight:600,color:C.blue}}>
+                        Read on Substack →
+                      </div>
+                    </a>
+                  ))}
                 </div>
               </div>
             )}
