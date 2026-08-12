@@ -3,6 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import TradingViewWidget from "../components/TradingViewWidget";
 
 // ─── Alpha Vantage key ───────────────────────────────────────────────────────
 // Add your free key from alphavantage.co to .env as VITE_AV_KEY=your_key_here
@@ -224,6 +225,30 @@ export default function NYSEPage() {
 
       {/* body */}
       <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"32px 28px 60px"}}>
+
+        {/* live TradingView hero — S&P 500 chart */}
+        <div style={{marginBottom:32}}>
+          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:12}}>
+            <div>
+              <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color:C.orange,marginBottom:4}}>Benchmark</div>
+              <h2 style={{fontFamily:SERIF,fontSize:"clamp(20px,2.5vw,28px)",fontWeight:700,color:C.ink,letterSpacing:"-.005em"}}>S&amp;P 500 · Live</h2>
+            </div>
+          </div>
+          <TradingViewWidget
+            kind="advanced-chart"
+            height={440}
+            config={{
+              symbol: "SP:SPX",
+              interval: "D",
+              timezone: "America/New_York",
+              style: "3",
+              hide_top_toolbar: false,
+              allow_symbol_change: true,
+              details: true,
+              save_image: false,
+            }}
+          />
+        </div>
 
         {/* top movers */}
         <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20,marginBottom:32}}>

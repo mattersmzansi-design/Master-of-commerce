@@ -3,6 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import TradingViewWidget from "../components/TradingViewWidget";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 function formatPrice(n) {
@@ -192,9 +193,35 @@ export default function CryptoPage() {
         </div>
       )}
 
+      {/* live TradingView hero — BTC chart */}
+      <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"28px 28px 0"}}>
+        <div style={{marginBottom:28}}>
+          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",marginBottom:12}}>
+            <div>
+              <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color:C.orange,marginBottom:4}}>Benchmark</div>
+              <h2 style={{fontFamily:SERIF,fontSize:"clamp(20px,2.5vw,28px)",fontWeight:700,color:C.ink,letterSpacing:"-.005em"}}>Bitcoin · Live</h2>
+            </div>
+          </div>
+          <TradingViewWidget
+            kind="advanced-chart"
+            height={440}
+            config={{
+              symbol: "COINBASE:BTCUSD",
+              interval: "60",
+              timezone: "Africa/Johannesburg",
+              style: "3",
+              hide_top_toolbar: false,
+              allow_symbol_change: true,
+              details: true,
+              save_image: false,
+            }}
+          />
+        </div>
+      </section>
+
       {/* top movers */}
       {coins.length>0 && (
-        <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"28px 28px 0"}}>
+        <section className="mc-pad" style={{maxWidth:1200,margin:"0 auto",padding:"0 28px 0"}}>
           <div className="mc-collapse-sm" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,marginBottom:28}}>
             {[{label:"Top Gainers",list:gainers,color:C.green},{label:"Top Losers",list:losers,color:C.red}].map(({label,list,color})=>(
               <div key={label} style={{border:`1px solid ${C.rule}`,background:C.paper}}>
