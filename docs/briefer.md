@@ -37,6 +37,7 @@
 
 ## Next up (my picks)
 
+- **Strategy layer (next session)** — owner wants to wire "whether buy / sell" onto the market pages: signals, indicators, or a personal thesis framework. Scope this out at the start of the next session — options range from TradingView's Technical Analysis widget (0 effort, generic signals) to a bespoke "Ntokozo's rating" per ticker (real work, real value).
 - **Start writing regularly on Substack** — everything's wired up; the platform now needs actual voice + posts landing weekly.
 - Deep-link search results to the exact item (article/ticker/fixture).
 - Add a lightweight analytics tag (Plausible is privacy-first & POPIA-friendly).
