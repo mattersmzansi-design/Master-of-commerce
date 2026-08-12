@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { C, SANS } from "../theme";
 import { search } from "../lib/searchIndex.js";
 import { SUBSTACK_SUBSCRIBE_URL } from "../lib/substack.js";
+import { SOCIALS, CONTACT_EMAIL, SocialIcon } from "../lib/socials.jsx";
 
 const BRAND_GRAD = "radial-gradient(130% 150% at 28% 28%, #FBC02D 0%, #F7941E 46%, #F24E01 100%)";
 
@@ -207,9 +208,9 @@ export default function Nav() {
         </div>
       )}
 
-      {/* Mobile menu — the burger carries all section links */}
+      {/* Mobile menu — the burger carries all section links + socials */}
       {menuOpen && (
-        <nav className="mc-mob-only" style={{ borderTop:`1px solid ${C.rule}`, background:C.paper, flexDirection:"column", padding:"4px 14px 10px" }}>
+        <nav className="mc-mob-only" style={{ borderTop:`1px solid ${C.rule}`, background:C.paper, flexDirection:"column", padding:"4px 14px 14px" }}>
           {LINKS.map(l => {
             const active = pathname === l.path;
             return (
@@ -223,6 +224,22 @@ export default function Nav() {
               </Link>
             );
           })}
+          <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginTop:14 }}>
+            {SOCIALS.map(s => (
+              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                aria-label={s.label} title={s.label} onClick={() => setMenuOpen(false)}
+                style={{ width:40, height:40, borderRadius:10, background:C.ink, color:"#fff",
+                  display:"inline-flex", alignItems:"center", justifyContent:"center" }}>
+                <SocialIcon name={s.icon} size={19} />
+              </a>
+            ))}
+            <a href={`mailto:${CONTACT_EMAIL}`}
+              aria-label="Email us" title={CONTACT_EMAIL} onClick={() => setMenuOpen(false)}
+              style={{ width:40, height:40, borderRadius:10, background:C.orange, color:"#fff",
+                display:"inline-flex", alignItems:"center", justifyContent:"center" }}>
+              <SocialIcon name="email" size={19} />
+            </a>
+          </div>
         </nav>
       )}
     </header>
