@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
+import { SOCIALS, CONTACT_EMAIL, SocialIcon } from "../lib/socials.jsx";
 
 const COLS = [
   { title:"Markets",  links:[{l:"JSE Stocks",path:"/jse"},{l:"NYSE Stocks",path:"/nyse"},{l:"Crypto",path:"/crypto"},{l:"Forex",path:"/"}] },
@@ -22,7 +23,29 @@ export default function Footer({ note, children }) {
                 <span style={{ fontFamily:SANS, fontWeight:800, fontSize:9, color:C.cyan, letterSpacing:".28em", textTransform:"uppercase", marginTop:4 }}>Markets · News · Data</span>
               </div>
             </div>
-            <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:200 }}>Your daily brief for global markets, live data and soccer betting.</p>
+            <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:220 }}>Your daily brief for global markets, live data and soccer betting.</p>
+
+            {/* Socials + contact */}
+            <div style={{ marginTop:18, display:"flex", flexWrap:"wrap", gap:10 }}>
+              {SOCIALS.map(s => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                  aria-label={s.label} title={s.label}
+                  style={{ width:36, height:36, borderRadius:9, background:"rgba(255,255,255,.08)", color:"#fff",
+                    display:"inline-flex", alignItems:"center", justifyContent:"center", transition:"background .15s" }}>
+                  <SocialIcon name={s.icon} size={18} />
+                </a>
+              ))}
+              <a href={`mailto:${CONTACT_EMAIL}`}
+                aria-label="Email us" title={CONTACT_EMAIL}
+                style={{ width:36, height:36, borderRadius:9, background:C.orange, color:"#fff",
+                  display:"inline-flex", alignItems:"center", justifyContent:"center" }}>
+                <SocialIcon name="email" size={18} />
+              </a>
+            </div>
+            <a href={`mailto:${CONTACT_EMAIL}`}
+              style={{ display:"inline-block", marginTop:12, fontFamily:SANS, fontSize:12, color:"rgba(255,255,255,.7)" }}>
+              {CONTACT_EMAIL}
+            </a>
           </div>
           {COLS.map(col => (
             <div key={col.title}>
