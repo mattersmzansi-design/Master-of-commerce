@@ -7,6 +7,7 @@ import Betting from "./pages/Betting";
 import Calendar from "./pages/Calendar";
 import NYSE from "./pages/NYSE";
 import JSE from "./pages/JSE";
+import Sectors from "./pages/Sectors";
 import ComingSoon from "./pages/ComingSoon";
 import { fetchSubstackPosts } from "./lib/substack.js";
 import { addToIndex } from "./lib/searchIndex.js";
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/nyse" element={<NYSE />} />
         <Route path="/jse" element={<JSE />} />
+        <Route path="/sectors" element={<Sectors />} />
         <Route path="*" element={
           <ComingSoon title="Page not found" blurb="That page doesn't exist yet." />
         } />
