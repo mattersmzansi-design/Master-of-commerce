@@ -4,7 +4,7 @@
 > branded `mzansi-briefer.pdf` alongside it — edit the lists below, then run
 > `node docs/render-pdfs.mjs` to rebuild the PDF.
 >
-> **Last updated:** 2026-08-12 · Codename: Genesis 🧬
+> **Last updated:** 2026-08-13 · Codename: Genesis 🧬
 
 ---
 
@@ -14,6 +14,7 @@
 - **Substack integration** — Ntokozo's latest 3 posts pull from `ntokozocele.substack.com/feed` (via a Vercel serverless function) and show as a "Ntokozo's take" section on the News page, brand-styled, click-through to Substack. Substack posts also appear in site-wide search tagged "SUBSTACK".
 - **Socials + contact** — Instagram, X and Facebook icons in the footer + mobile burger menu, plus the `info@mzansimoneymatters.co.za` email as an orange button. Handles live in one file (`src/lib/socials.jsx`) so adding TikTok / LinkedIn / YouTube / WhatsApp later is a one-line edit.
 - **TradingView widgets** — The `/jse` page is now a real live page (JSE All Share chart + top-10 ticker tape + 9 mini charts + ZA market screener). NYSE and Crypto pages have live TradingView hero charts (S&P 500 and BTCUSD) above their existing content.
+- **Sector Health page** — `/sectors` renders weekly JSE sector commentary from Supabase (`sector_summary_public` view). Each card has a color-graded 0–100 health gauge, cycle position, expandable narrative, tailwinds/headwinds bullet lists, and "what to watch next". Data flows client → `/api/sectors` (Vercel serverless function) → Supabase, cached 10 min at edge. Compliance-strict: prominent "educational only, not financial advice" disclaimer at top and bottom; no buy/sell language anywhere.
 - **Newsletter signup via Substack** — The ✉ Subscribe button on both mobile and desktop now links straight to Ntokozo's Substack signup (no more FormSubmit relay). One list, one place to write from, one place to send campaigns.
 - **Site-wide search** — Search icon opens a live filter across news articles, NYSE stocks, top cryptos, calendar events, fixtures and the pages themselves. Click a result to jump.
 - **Live NYSE prices** — Alpha Vantage feeds ticker data on the NYSE page. Sample data shows when the daily API quota is used up.
