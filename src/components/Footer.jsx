@@ -3,7 +3,7 @@ import { C, SERIF, MONO, SANS } from "../theme";
 import { SOCIALS, CONTACT_EMAIL, SocialIcon } from "../lib/socials.jsx";
 
 const COLS = [
-  { title:"Markets",  links:[{l:"JSE Stocks",path:"/jse"},{l:"NYSE Stocks",path:"/nyse"},{l:"Crypto",path:"/crypto"},{l:"Forex",path:"/"}] },
+  { title:"Markets",  links:[{l:"JSE Stocks",path:"/jse"},{l:"Sector Health",path:"/sectors"},{l:"NYSE Stocks",path:"/nyse"},{l:"Crypto",path:"/crypto"}] },
   { title:"News",     links:[{l:"Business News",path:"/news"},{l:"SA Economy",path:"/news"},{l:"Global Markets",path:"/news"},{l:"Commodities",path:"/news"}] },
   { title:"Tools",    links:[{l:"Economic Calendar",path:"/calendar"},{l:"Market Screener",path:"/crypto"},{l:"Portfolio",path:"/"}] },
   { title:"Betting",  links:[{l:"Soccer Fixtures",path:"/betting"},{l:"Live Odds",path:"/betting"},{l:"Results",path:"/betting"}] },
