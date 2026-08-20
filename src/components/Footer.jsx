@@ -6,14 +6,13 @@ const COLS = [
   { title:"Markets",  links:[{l:"JSE Stocks",path:"/jse"},{l:"Sector Health",path:"/sectors"},{l:"NYSE Stocks",path:"/nyse"},{l:"Crypto",path:"/crypto"}] },
   { title:"News",     links:[{l:"Business News",path:"/news"},{l:"SA Economy",path:"/news"},{l:"Global Markets",path:"/news"},{l:"Commodities",path:"/news"}] },
   { title:"Tools",    links:[{l:"Economic Calendar",path:"/calendar"},{l:"Market Screener",path:"/crypto"},{l:"Portfolio",path:"/"}] },
-  { title:"Betting",  links:[{l:"Soccer Fixtures",path:"/betting"},{l:"Live Odds",path:"/betting"},{l:"Results",path:"/betting"}] },
 ];
 
 export default function Footer({ note, children }) {
   return (
     <footer style={{ background:C.ink, color:C.bg }}>
       <div className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"48px 28px 0" }}>
-        <div className="mc-footer" style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(4,1fr)", gap:32 }}>
+        <div className="mc-footer" style={{ borderBottom:`1px solid rgba(255,255,255,.12)`, paddingBottom:36, marginBottom:36, display:"grid", gridTemplateColumns:"1.4fr repeat(3,1fr)", gap:32 }}>
           <div className="mc-footer-brand">
             <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:12 }}>
               <img src="/logo-mark.png" alt="Mzansi Money Matters logo"
@@ -23,7 +22,7 @@ export default function Footer({ note, children }) {
                 <span style={{ fontFamily:SANS, fontWeight:800, fontSize:9, color:C.cyan, letterSpacing:".28em", textTransform:"uppercase", marginTop:4 }}>Markets · News · Data</span>
               </div>
             </div>
-            <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:220 }}>Your daily brief for global markets, live data and soccer betting.</p>
+            <p style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.5)", lineHeight:1.7, maxWidth:220 }}>Your daily brief for South African &amp; global markets — news, live data and sector commentary.</p>
 
             {/* Socials + contact */}
             <div style={{ marginTop:18, display:"flex", flexWrap:"wrap", gap:10 }}>

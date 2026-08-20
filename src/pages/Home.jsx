@@ -59,15 +59,7 @@ const CALENDAR = [
   { date:"Wed 18 Jun", time:"11:00", flag:"🇿🇦", event:"SA Unemployment Rate Q1",         impact:"high",   forecast:"32.1%", prev:"32.9%" },
 ];
 
-const MATCHES = [
-  { league:"PSL",            home:"Mamelodi Sundowns", away:"Orlando Pirates",  time:"15:00", odds:{h:1.85,d:3.40,a:4.20} },
-  { league:"PSL",            home:"Kaizer Chiefs",     away:"SuperSport Utd",   time:"17:30", odds:{h:2.10,d:3.10,a:3.50} },
-  { league:"Premier League", home:"Arsenal",           away:"Manchester City",  time:"17:30", odds:{h:2.40,d:3.20,a:2.95} },
-  { league:"La Liga",        home:"Real Madrid",       away:"Barcelona",        time:"20:00", odds:{h:2.10,d:3.30,a:3.40} },
-];
-
 const IMPACT = { high:C.red, medium:C.amber, low:C.green };
-const LEAGUE_CLR = { "PSL":C.green, "Premier League":C.blue, "La Liga":C.amber, "Champions League":C.gold };
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -80,7 +72,6 @@ const fmtPrice  = (n, prefix="") => `${prefix}${n.toLocaleString("en-US",{minimu
 export default function Home() {
   const [crypto, setCrypto]   = useState([]);
   const [mktTab, setMktTab]   = useState("JSE");
-  const [picks, setPicks]     = useState({});
   const [live, setLive]       = useState([]);
 
   useEffect(() => {
@@ -235,79 +226,30 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Calendar + Betting side by side ── */}
-      <section className="mc-pad mc-collapse" style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}`, display:"grid", gridTemplateColumns:"1fr 1fr", gap:48 }}>
-        {/* Economic Calendar */}
-        <div>
-          <SectionHead title="Economic Calendar" sub="Upcoming Events" link="/calendar" />
-          <table style={{ width:"100%" }}>
-            <thead>
-              <tr style={{ borderBottom:`1px solid ${C.rule}` }}>
-                {["Date","Event","Impact","Forecast"].map(h => (
-                  <th key={h} style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".07em", padding:"8px 8px", textAlign:"left", fontWeight:600 }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {CALENDAR.map((e,i) => (
-                <tr key={i} style={{ borderBottom:`1px solid ${C.rule2}` }}>
-                  <td style={{ fontFamily:MONO, fontSize:11, color:C.muted, padding:"10px 8px", whiteSpace:"nowrap" }}>{e.flag} {e.date}</td>
-                  <td style={{ fontFamily:SANS, fontSize:12, color:C.ink, padding:"10px 8px", lineHeight:1.3 }}>{e.event}</td>
-                  <td style={{ padding:"10px 8px" }}><span style={{ display:"inline-block", width:7, height:7, borderRadius:"50%", background:IMPACT[e.impact] }} /></td>
-                  <td style={{ fontFamily:MONO, fontSize:12, fontWeight:600, color:C.ink, padding:"10px 8px" }}>{e.forecast}</td>
-                </tr>
+      {/* ── Economic Calendar ── */}
+      <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"36px 28px", borderBottom:`1px solid ${C.rule}` }}>
+        <SectionHead title="Economic Calendar" sub="Upcoming Events" link="/calendar" />
+        <table style={{ width:"100%" }}>
+          <thead>
+            <tr style={{ borderBottom:`1px solid ${C.rule}` }}>
+              {["Date","Event","Impact","Forecast"].map(h => (
+                <th key={h} style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".07em", padding:"8px 8px", textAlign:"left", fontWeight:600 }}>{h}</th>
               ))}
-            </tbody>
-          </table>
-          <div style={{ paddingTop:12 }}>
-            <Link to="/calendar" style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Full calendar →</Link>
-          </div>
-        </div>
-
-        {/* Soccer Betting */}
-        <div>
-          <SectionHead title="Today's Fixtures" sub="Soccer Betting" link="/betting" />
-          <div style={{ display:"flex", flexDirection:"column", gap:0 }}>
-            {MATCHES.map((m,i) => {
-              const lc = LEAGUE_CLR[m.league] || C.muted;
-              const picked = picks[i];
-              return (
-                <div key={i} style={{ padding:"12px 0", borderBottom:`1px solid ${C.rule2}` }}>
-                  <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
-                    <span style={{ fontFamily:MONO, fontSize:9, fontWeight:700, textTransform:"uppercase", letterSpacing:".08em", color:lc }}>{m.league}</span>
-                    <span style={{ fontFamily:MONO, fontSize:10, color:C.muted }}>{m.time}</span>
-                  </div>
-                  <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:10, alignItems:"center", marginBottom:8 }}>
-                    <span style={{ fontFamily:SERIF, fontSize:13, fontWeight:600, color:C.ink }}>{m.home}</span>
-                    <span style={{ fontFamily:MONO, fontSize:11, color:C.muted }}>vs</span>
-                    <span style={{ fontFamily:SERIF, fontSize:13, fontWeight:600, color:C.ink, textAlign:"right" }}>{m.away}</span>
-                  </div>
-                  <div style={{ display:"flex", gap:6 }}>
-                    {[["H",m.odds.h,"h"],["D",m.odds.d,"d"],["A",m.odds.a,"a"]].map(([lbl,odd,key]) => (
-                      <button key={key} onClick={() => setPicks(p => ({...p,[i]:p[i]===key?null:key}))} style={{
-                        flex:1, border:`1px solid ${picks[i]===key ? C.ink : C.rule}`,
-                        background: picks[i]===key ? C.ink : "transparent",
-                        color: picks[i]===key ? C.bg : C.ink,
-                        fontFamily:MONO, fontSize:11, fontWeight:700, padding:"5px 0", textAlign:"center",
-                      }}>
-                        <div style={{ fontSize:9, marginBottom:2, opacity:.7 }}>{lbl}</div>
-                        <div>{odd.toFixed(2)}</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {Object.values(picks).filter(Boolean).length > 0 && (
-            <div style={{ marginTop:14, display:"flex", justifyContent:"space-between", alignItems:"center", padding:"10px 14px", border:`1px solid ${C.ink}`, background:C.ink }}>
-              <span style={{ fontFamily:SANS, fontSize:12, color:C.bg, fontWeight:600 }}>{Object.values(picks).filter(Boolean).length} selection{Object.values(picks).filter(Boolean).length>1?"s":""} added</span>
-              <Link to="/betting" style={{ fontFamily:SANS, fontSize:12, fontWeight:700, color:"#FFF3E5" }}>View bet slip →</Link>
-            </div>
-          )}
-          <div style={{ paddingTop:12 }}>
-            <Link to="/betting" style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>All fixtures →</Link>
-          </div>
+            </tr>
+          </thead>
+          <tbody>
+            {CALENDAR.map((e,i) => (
+              <tr key={i} style={{ borderBottom:`1px solid ${C.rule2}` }}>
+                <td style={{ fontFamily:MONO, fontSize:11, color:C.muted, padding:"10px 8px", whiteSpace:"nowrap" }}>{e.flag} {e.date}</td>
+                <td style={{ fontFamily:SANS, fontSize:12, color:C.ink, padding:"10px 8px", lineHeight:1.3 }}>{e.event}</td>
+                <td style={{ padding:"10px 8px" }}><span style={{ display:"inline-block", width:7, height:7, borderRadius:"50%", background:IMPACT[e.impact] }} /></td>
+                <td style={{ fontFamily:MONO, fontSize:12, fontWeight:600, color:C.ink, padding:"10px 8px" }}>{e.forecast}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div style={{ paddingTop:12 }}>
+          <Link to="/calendar" style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Full calendar →</Link>
         </div>
       </section>
 
