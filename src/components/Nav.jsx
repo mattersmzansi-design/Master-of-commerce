@@ -13,6 +13,7 @@ const LINKS = [
   { label:"Sector Health",    path:"/sectors"  },
   { label:"NYSE",             path:"/nyse"     },
   { label:"Crypto",           path:"/crypto"   },
+  { label:"Predictions",      path:"/predictions" },
   { label:"Economic Calendar",path:"/calendar" },
 ];
 

@@ -16,6 +16,7 @@ const PAGES = [
   { title:"Business News",     subtitle:"Latest South African & global finance",  path:"/news",     kind:"Page" },
   { title:"JSE",               subtitle:"Johannesburg Stock Exchange — live prices",  path:"/jse",     kind:"Page" },
   { title:"Sector Health",     subtitle:"Weekly commentary on JSE-listed sectors",     path:"/sectors", kind:"Page" },
+  { title:"Prediction Markets",subtitle:"Live Polymarket odds on politics, crypto & economics", path:"/predictions", kind:"Page" },
   { title:"NYSE",              subtitle:"New York Stock Exchange — live prices",  path:"/nyse",     kind:"Page" },
   { title:"Crypto",            subtitle:"Bitcoin, Ethereum and the top coins",    path:"/crypto",   kind:"Page" },
   { title:"Economic Calendar", subtitle:"Global data releases and central bank meetings", path:"/calendar", kind:"Page" },
