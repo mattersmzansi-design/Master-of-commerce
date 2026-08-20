@@ -44,6 +44,11 @@ npm run build    # production build → dist/
   (free key at alphavantage.co, 25 req/day). Add it in Vercel → Settings → Environment
   Variables, or a local `.env` file. Not committed.
 - **CoinGecko** (crypto) needs no key.
+- **Supabase** (`/sectors` page — weekly JSE sector commentary) uses env vars
+  `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Read server-side
+  only in `api/sectors.js`, so the Next.js-style prefix works fine on this Vite
+  site (Vite would need `VITE_*` for client-side, but we never expose the anon
+  key to the browser). The page queries the `sector_summary_public` view.
 
 ## Working style (owner preference)
 Explain briefly *as we build* — a sentence or two of plain-English "what this is / why it

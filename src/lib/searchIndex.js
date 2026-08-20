@@ -10,7 +10,6 @@ import { ARTICLES }     from "../pages/News.jsx";
 import { MOCK_STOCKS }  from "../pages/NYSE.jsx";
 import { MOCK }         from "../pages/Crypto.jsx";
 import { EVENTS }       from "../pages/Calendar.jsx";
-import { FIXTURES }     from "../pages/Betting.jsx";
 
 const PAGES = [
   { title:"Home",              subtitle:"Today's brief — markets, news, sport",   path:"/",         kind:"Page" },
@@ -20,7 +19,6 @@ const PAGES = [
   { title:"NYSE",              subtitle:"New York Stock Exchange — live prices",  path:"/nyse",     kind:"Page" },
   { title:"Crypto",            subtitle:"Bitcoin, Ethereum and the top coins",    path:"/crypto",   kind:"Page" },
   { title:"Economic Calendar", subtitle:"Global data releases and central bank meetings", path:"/calendar", kind:"Page" },
-  { title:"Soccer Betting",    subtitle:"PSL, EPL, La Liga and Champions League fixtures", path:"/betting", kind:"Page" },
 ];
 
 const news = ARTICLES.map(a => ({
@@ -51,14 +49,7 @@ const events = EVENTS.map(e => ({
   kind:     "Calendar",
 }));
 
-const fixtures = FIXTURES.map(f => ({
-  title:    `${f.home} vs ${f.away}`,
-  subtitle: `${f.league} · ${f.group} · ${f.kickoff}`,
-  path:     "/betting",
-  kind:     "Fixture",
-}));
-
-const BASE_INDEX = [...PAGES, ...news, ...stocks, ...coins, ...events, ...fixtures];
+const BASE_INDEX = [...PAGES, ...news, ...stocks, ...coins, ...events];
 let extras = []; // populated at runtime by dynamic sources (Substack, live news, …)
 
 export const INDEX = BASE_INDEX;

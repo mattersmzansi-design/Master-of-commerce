@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Crypto from "./pages/Crypto";
 import News from "./pages/News";
-import Betting from "./pages/Betting";
 import Calendar from "./pages/Calendar";
 import NYSE from "./pages/NYSE";
 import JSE from "./pages/JSE";
@@ -31,7 +30,6 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/crypto" element={<Crypto />} />
         <Route path="/news" element={<News />} />
-        <Route path="/betting" element={<Betting />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/nyse" element={<NYSE />} />
         <Route path="/jse" element={<JSE />} />

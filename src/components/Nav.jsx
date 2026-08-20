@@ -14,7 +14,6 @@ const LINKS = [
   { label:"NYSE",             path:"/nyse"     },
   { label:"Crypto",           path:"/crypto"   },
   { label:"Economic Calendar",path:"/calendar" },
-  { label:"Soccer Betting",   path:"/betting"  },
 ];
 
 const H = 50; // masthead band height
