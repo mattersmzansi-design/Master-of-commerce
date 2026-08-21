@@ -4,7 +4,7 @@
 > branded `mzansi-briefer.pdf` alongside it — edit the lists below, then run
 > `node docs/render-pdfs.mjs` to rebuild the PDF.
 >
-> **Last updated:** 2026-08-15 · Codename: Genesis 🧬
+> **Last updated:** 2026-08-16 · Codename: Genesis 🧬
 
 ---
 
@@ -22,6 +22,8 @@
 - **Economic Calendar (seed data)** — 26 upcoming global data releases across 8 countries. Ready to swap for a live feed when we pick one.
 - **Home "Today's brief"** — Rate-holds top story, JSE/NYSE/BTC snapshot, Economic Calendar peek — the front-page recap of everything.
 - **Prediction Markets page** — `/predictions` renders live Polymarket odds on politics, crypto and business events. Server-side filters to those three categories with a keyword blocklist that keeps sports/celebrity/tasteless markets out. Each card shows the leading outcome as a colour-graded probability, the full YES/NO (or top-3 for multi-outcome) split, 24h volume, and a click-out to Polymarket. Same compliance framing as `/sectors` — educational-only banner + "market pricing" language, never "buy/sell". Fills the slot vacated by Soccer Betting.
+- **Analytics & Speed Insights** — Vercel Web Analytics + Speed Insights wired into the app root. Cookie-less, POPIA-friendly, no consent banner needed. Owner sees page views / top pages / referrers / real-world Core Web Vitals in the Vercel dashboard.
+- **Legal & Compliance page** — `/legal` covers the Financial Disclaimer (not a licensed FSP, data may be delayed/wrong, third-party embeds carry own terms), Terms of Use (permitted/prohibited use, IP, SA governing law), and Privacy Policy (POPIA-aligned — what we collect, what we don't, your rights). Footer's bottom row links to each section. Boilerplate-quality; owner should have a lawyer review before big paid-traffic push.
 - **Auto-deploy on Vercel** — Every push to main goes live at www.mzansimoneymatters.co.za within a minute.
 
 ## Not there yet
@@ -31,13 +33,11 @@
 - **Alpha Vantage rate limit** — Free tier is 25 requests/day. On a busy day the NYSE page falls back to sample data. A paid tier or a caching layer fixes it.
 - **Live economic calendar** — Currently hard-coded. Trading Economics / FMP would give a live feed but both charge past a small free tier.
 - **Bundle size** — >500kb single JS chunk (build warns). Code-splitting per route will speed up first paint on 3G.
-- **Analytics & error tracking** — No Google Analytics / Plausible / Sentry yet. We're flying blind on traffic and crashes.
-- **Legal footer** — No T&Cs, privacy notice, or POPIA/GDPR cookie disclosure yet — required before we drive real traffic.
+- **Error tracking** — We have traffic analytics now (Vercel), but no error / crash tracking (Sentry-style). Not urgent while traffic is small.
+- **Lawyer review of /legal** — The legal page is a reasonable-standard template; a real SA attorney should review before any big paid-traffic push (~R1,500–R3,000 for 30 min).
 
 ## Next up (my picks)
 
 - **Strategy layer** — a lightweight "Ntokozo's rating" per JSE ticker (Watch / Avoid / etc + one-line reason), stored simply and displayed as a branded card next to the TradingView chart on each stock. Ties into Substack articles. This is the real editorial differentiation for the site — the thing nobody else can copy.
-- **Legal footer** — T&Cs, privacy notice, POPIA cookie notice. Needed before we drive real traffic.
 - **Start writing regularly on Substack** — everything's wired up; the platform now needs actual voice + posts landing weekly.
 - Deep-link search results to the exact item (article / ticker / event).
-- Add a lightweight analytics tag (Plausible is privacy-first & POPIA-friendly).
