@@ -45,6 +45,14 @@ const POSITIVE_KEYWORDS = [
   "usd", "eur", "gbp", "zar", "yuan", "yen",
 ];
 
+// Polymarket returns outcomes and outcomePrices as JSON-encoded strings
+// (e.g. '["Yes","No"]' and '["0.62","0.38"]'). This safely decodes them.
+function parseJsonMaybe(v, fallback = null) {
+  if (Array.isArray(v)) return v;
+  if (typeof v !== "string") return fallback;
+  try { return JSON.parse(v); } catch { return fallback; }
+}
+
 function tokenSet(m) {
   // Everywhere Polymarket might stash a category/tag.
   const bag = [];
