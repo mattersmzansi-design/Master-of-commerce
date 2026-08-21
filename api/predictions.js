@@ -17,30 +17,74 @@ const GAMMA_URL = "https://gamma-api.polymarket.com/markets";
 // covers price/ETF milestones, "Business" covers Fed rate decisions & econ data.
 // Add "Science" or "Middle East" here later if the site's coverage widens.
 const ALLOWED_CATEGORIES = new Set([
-  "politics", "crypto", "business",
+  "politics", "crypto", "business", "economics", "finance", "world",
 ]);
 
 // Explicit blocklist as a safety net (Polymarket sometimes miscategorises).
 // Anything containing these tokens in the question text is skipped even if
 // the category passes.
 const BLOCKED_TOKENS = [
-  "assassinat", "die by", "will die", "death", "arrested",
-  "kanye", "kardashian", "taylor swift", "grammy",
-  "oscar", "super bowl", "world cup", "nba", "nfl", "premier league",
+  "assassinat", "die by", "will die", "death of", "arrested",
+  "kanye", "kardashian", "taylor swift", "grammy", "oscar",
+  "super bowl", "world cup", "nba", "nfl", "premier league",
+  "champions league", "mma", "ufc", "boxing", "tennis", "cricket",
+  "olympics",
 ];
 
-function parseJsonMaybe(v, fallback = null) {
-  if (Array.isArray(v)) return v;
-  if (typeof v !== "string") return fallback;
-  try { return JSON.parse(v); } catch { return fallback; }
+// Positive keyword rescue — if a market has no usable category tag, we look
+// at the question text. If it mentions any of these finance/politics/crypto
+// signals, we treat it as on-topic. Catches markets Polymarket puts in
+// unusual buckets or leaves uncategorised.
+const POSITIVE_KEYWORDS = [
+  "election", "president", "cabinet", "congress", "parliament", "senate",
+  "supreme court", "cabinet", "prime minister", "cabinet reshuffle",
+  "fed ", "sarb", "ecb", "bank of england", "boj",
+  "rate cut", "rate hike", "interest rate", "inflation", "cpi", "gdp", "recession",
+  "bitcoin", "btc", "ethereum", "eth", "crypto", "coinbase", "binance", "solana", "xrp",
+  "etf", "ipo", "s&p", "nasdaq", "dow ", "tesla", "nvidia", "apple ",
+  "usd", "eur", "gbp", "zar", "yuan", "yen",
+];
+
+function tokenSet(m) {
+  // Everywhere Polymarket might stash a category/tag.
+  const bag = [];
+  const push = v => { if (v) bag.push(String(v).toLowerCase()); };
+  push(m.category);
+  push(m.categoryLabel);
+  push(m.groupItemTitle);
+  if (m.events && Array.isArray(m.events)) {
+    for (const e of m.events) {
+      push(e?.category);
+      push(e?.title);
+      if (Array.isArray(e?.tags)) for (const t of e.tags) push(t?.label || t?.slug || t);
+    }
+  }
+  if (Array.isArray(m.tags)) for (const t of m.tags) push(t?.label || t?.slug || t);
+  return bag;
 }
 
 function passesFilters(m) {
-  const cat = (m.category || m.categoryLabel || "").toLowerCase();
-  if (!ALLOWED_CATEGORIES.has(cat)) return false;
   const q = (m.question || "").toLowerCase();
   for (const bad of BLOCKED_TOKENS) if (q.includes(bad)) return false;
-  return true;
+
+  // 1) Any category-ish tag that matches our allowlist? Accept.
+  const tokens = tokenSet(m);
+  for (const t of tokens) if (ALLOWED_CATEGORIES.has(t)) return true;
+
+  // 2) Question text mentions a finance/politics/crypto signal? Accept.
+  for (const kw of POSITIVE_KEYWORDS) if (q.includes(kw)) return true;
+
+  return false;
+}
+
+function inferCategory(m) {
+  // Best-effort tagging so the front-end pill + filter tabs still work.
+  const tokens = tokenSet(m).join(" ");
+  const q = (m.question || "").toLowerCase();
+  const hay = `${tokens} ${q}`;
+  if (/(bitcoin|btc|ethereum|eth|crypto|solana|xrp|coinbase|binance|etf)/.test(hay)) return "crypto";
+  if (/(election|president|congress|parliament|supreme court|senate|prime minister|cabinet)/.test(hay)) return "politics";
+  return "business";  // catch-all for Fed/rates/inflation/econ etc.
 }
 
 function normalise(m) {
@@ -53,11 +97,11 @@ function normalise(m) {
     slug:        m.slug,
     question:    m.question,
     description: m.description ? String(m.description).slice(0, 400) : null,
-    category:    m.category || null,
+    category:    inferCategory(m),
     endDate:     m.endDate || m.end_date_iso || null,
-    volume24hr:  Number(m.volume24hr || 0),
+    volume24hr:  Number(m.volume24hr || m.volume24Hr || m.volumeNum24hr || 0),
     volumeTotal: Number(m.volume || m.volumeNum || 0),
-    liquidity:   Number(m.liquidity || 0),
+    liquidity:   Number(m.liquidity || m.liquidityNum || 0),
     outcomes,
     prices,     // parallel to outcomes; e.g. [0.62, 0.38]
     url:        m.slug ? `https://polymarket.com/market/${m.slug}` : null,
@@ -82,6 +126,28 @@ export default async function handler(req, res) {
     if (!r.ok) throw new Error(`Polymarket returned HTTP ${r.status}`);
     const raw = await r.json();
     const list = Array.isArray(raw) ? raw : (raw.data || raw.markets || []);
+
+    // Debug mode — hit /api/predictions?debug=1 to inspect the raw shape and
+    // see how many markets pass each filter step. Never cached.
+    if (req.query && req.query.debug) {
+      const passedFilter = list.filter(passesFilters);
+      const afterNormalise = passedFilter.map(normalise);
+      const afterShape = afterNormalise.filter(m => m.outcomes.length >= 2 && m.prices.length === m.outcomes.length);
+      res.setHeader("Cache-Control", "no-store");
+      res.status(200).json({
+        rawCount:       list.length,
+        passedFilter:   passedFilter.length,
+        passedShape:    afterShape.length,
+        firstRaw:       list[0] || null,
+        firstPassed:    passedFilter[0] || null,
+        sampleQuestions: list.slice(0, 12).map(m => ({
+          q:        m.question,
+          category: m.category,
+          tokens:   tokenSet(m),
+        })),
+      });
+      return;
+    }
 
     const cleaned = list
       .filter(passesFilters)
