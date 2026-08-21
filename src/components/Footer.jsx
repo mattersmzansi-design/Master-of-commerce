@@ -60,9 +60,14 @@ export default function Footer({ note, children }) {
         {children && (
           <div style={{ paddingBottom:24, textAlign:"center" }}>{children}</div>
         )}
-        <div style={{ paddingBottom:24, display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
-          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>© 2026 Mzansi Money Matters. Financial data for informational purposes only.</div>
-          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>{note || "Crypto prices via CoinGecko API"}</div>
+        <div style={{ paddingBottom:24, display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:12, alignItems:"center" }}>
+          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>© 2026 Mzansi Money Matters. Educational only — not financial advice.</div>
+          <div style={{ display:"flex", gap:14, flexWrap:"wrap" }}>
+            <Link to="/legal#disclaimer" style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.55)" }}>Disclaimer</Link>
+            <Link to="/legal#terms"      style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.55)" }}>Terms</Link>
+            <Link to="/legal#privacy"    style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.55)" }}>Privacy</Link>
+          </div>
+          <div style={{ fontFamily:MONO, fontSize:11, color:"rgba(255,255,255,.35)" }}>{note || "Crypto via CoinGecko"}</div>
         </div>
       </div>
     </footer>
