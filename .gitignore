@@ -1,6 +1,11 @@
 dist
 node_modules
 
+# Night Download Queue tool — local runtime data
+tools/download-scheduler/jobs.json
+tools/download-scheduler/downloads/*
+!tools/download-scheduler/downloads/.gitkeep
+
 # Local environment / secrets — never commit real keys
 .env
 .env.local
