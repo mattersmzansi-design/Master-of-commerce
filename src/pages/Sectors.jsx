@@ -2,7 +2,30 @@ import { useEffect, useMemo, useState } from "react";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import ShareToFacebookButton from "../components/ShareToFacebookButton";
 import { fetchSectors } from "../lib/sectors.js";
+
+// Build the pre-written Facebook caption for a sector report. The owner just
+// pastes it into FB's compose box after the button opens the share window.
+function buildShareCaption(row) {
+  const { label } = healthLabel(row.health_score);
+  const emoji = row.health_score == null ? "📋"
+              : row.health_score >= 70 ? "🟢"
+              : row.health_score >= 40 ? "🟡"
+              : "🔴";
+  const firstSentence = (row.health_narrative || "").split(/(?<=[.!?])\s+/)[0];
+  return [
+    `${emoji} ${row.sector} — ${label} (${row.health_score ?? "—"}/100)`,
+    row.cycle_position ? `Cycle: ${row.cycle_position}` : null,
+    "",
+    firstSentence || "This week's sector read is up on the site.",
+    "",
+    "Full breakdown — tailwinds, headwinds & what to watch next:",
+    "https://mzansimoneymatters.co.za/sectors",
+    "",
+    "#JSE #SouthAfricanMarkets #MoneyMatters",
+  ].filter(v => v !== null).join("\n");
+}
 
 // Compliance: this page is educational market commentary only.
 // The disclaimer text below is required and must stay visible on the page.
@@ -160,14 +183,23 @@ function SectorCard({ row }) {
         </div>
       )}
 
-      {/* meta */}
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", paddingTop: 10, borderTop: `1px solid ${C.rule2}`, marginTop: 4 }}>
-        <span style={{ fontFamily: MONO, fontSize: 10, color: C.muted, textTransform: "uppercase", letterSpacing: ".07em" }}>
-          Report: {fmtDate(row.report_date)}
-        </span>
-        <span style={{ fontFamily: MONO, fontSize: 10, color: C.dim }}>
-          Updated {fmtStamp(row.updated_at)}
-        </span>
+      {/* meta + share */}
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 10, flexWrap: "wrap", alignItems: "flex-start", paddingTop: 10, borderTop: `1px solid ${C.rule2}`, marginTop: 4 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <span style={{ fontFamily: MONO, fontSize: 10, color: C.muted, textTransform: "uppercase", letterSpacing: ".07em" }}>
+            Report: {fmtDate(row.report_date)}
+          </span>
+          <span style={{ fontFamily: MONO, fontSize: 10, color: C.dim }}>
+            Updated {fmtStamp(row.updated_at)}
+          </span>
+        </div>
+        {row.health_score != null && (
+          <ShareToFacebookButton
+            caption={buildShareCaption(row)}
+            url={`https://mzansimoneymatters.co.za/sectors#${encodeURIComponent((row.sector || "").toLowerCase().replace(/\s+/g, "-"))}`}
+            label="Share to FB"
+          />
+        )}
       </div>
     </article>
   );
