@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
@@ -84,6 +85,18 @@ export default function CryptoPage() {
   const [range,   setRange]     = useState("7D");
   const [rdCache, setRdCache]   = useState({});
   const [rdLoad,  setRdLoad]    = useState(false);
+  const navigate = useNavigate();
+
+  // Clicking any coin row (top-movers grid or main table) now takes the reader
+  // straight to a full AI Analyst breakdown for that coin. Replaces the old
+  // side-panel modal, which readers were reporting as "unopenable" — probably
+  // because the modal expected desktop-sized viewport behaviour that phone
+  // browsers didn't render reliably. Sending them to /analyst is both a fix
+  // and an upgrade: they get the full company/bull/bear/chart page instead of
+  // a cramped side panel.
+  function openCoin(c) {
+    navigate(`/analyst?symbol=${encodeURIComponent(c.symbol.toUpperCase())}`);
+  }
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -229,7 +242,7 @@ export default function CryptoPage() {
               <div key={label} style={{border:`1px solid ${C.rule}`,background:C.paper}}>
                 <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color,padding:"10px 14px",borderBottom:`1px solid ${C.rule}`}}>{label} · 24H</div>
                 {list.map(c=>(
-                  <div key={c.id} onClick={()=>setSelected(c.id)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",borderBottom:`1px solid ${C.rule2}`,cursor:"pointer"}}
+                  <div key={c.id} onClick={()=>openCoin(c)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",borderBottom:`1px solid ${C.rule2}`,cursor:"pointer"}}
                     onMouseEnter={e=>e.currentTarget.style.background="#FFF3E5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                     <div style={{display:"flex",alignItems:"center",gap:8}}>
                       <img src={c.image} alt={c.name} style={{width:20,height:20,borderRadius:"50%"}}/>
@@ -286,7 +299,7 @@ export default function CryptoPage() {
                 const up=(c.price_change_percentage_24h??0)>=0;
                 const spark=(c.sparkline_in_7d?.price||[]).filter((_,idx)=>idx%4===0);
                 return (
-                  <tr key={c.id} onClick={()=>setSelected(c.id)} style={{borderBottom:`1px solid ${C.rule2}`,cursor:"pointer"}}
+                  <tr key={c.id} onClick={()=>openCoin(c)} style={{borderBottom:`1px solid ${C.rule2}`,cursor:"pointer"}}
                     onMouseEnter={e=>e.currentTarget.style.background="#FFF3E5"} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                     <td style={{fontFamily:MONO,fontSize:12,color:C.muted,padding:"12px 14px"}}>{c.market_cap_rank||"—"}</td>
                     <td style={{padding:"12px 14px"}}>
