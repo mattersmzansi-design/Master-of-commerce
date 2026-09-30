@@ -5,6 +5,7 @@ import { fetchLiveNews } from "../lib/marketaux";
 import { fetchSubstackPosts, SUBSTACK_URL } from "../lib/substack.js";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 
 const CATEGORIES = ["JSE","NYSE","Crypto","SA Economy","Global"];
 
@@ -116,6 +117,7 @@ export default function NewsPage() {
 
   return (
     <div style={{background:C.bg}}>
+      <PageMeta title="Business News" description="Latest business and finance news for South Africa and global markets — updated throughout the trading day." path="/news" />
       <Nav/>
 
       {/* page header */}

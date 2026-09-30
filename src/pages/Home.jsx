@@ -4,6 +4,7 @@ import { C, SERIF, MONO, SANS } from "../theme";
 import { fetchLiveNews } from "../lib/marketaux";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 
 // ─── data ───────────────────────────────────────────────────────────────────
 
@@ -106,6 +107,7 @@ export default function Home() {
 
   return (
     <div style={{ background:C.bg }}>
+      <PageMeta title="Today's Brief" description="Your daily brief for South African & global markets — top story, live prices, calendar and crypto snapshot." path="/" />
       <Nav />
 
       {/* ── Market Index Strip ── */}

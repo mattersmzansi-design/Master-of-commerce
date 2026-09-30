@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 import ShareToFacebookButton from "../components/ShareToFacebookButton";
 import { fetchSectors } from "../lib/sectors.js";
 
@@ -259,6 +260,7 @@ export default function SectorsPage() {
 
   return (
     <div style={{ background: C.bg }}>
+      <PageMeta title="JSE Sector Health" description="Weekly educational commentary on the health of JSE-listed sectors — tailwinds, headwinds and what to watch next." path="/sectors" />
       <Nav />
 
       {/* page header — matches NYSE / Crypto / JSE pages */}

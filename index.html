@@ -24,6 +24,39 @@
     <meta name="twitter:title" content="Mzansi Money Matters — Markets, News & Sector Health" />
     <meta name="twitter:description" content="Your daily brief for South African & global markets." />
     <meta name="twitter:image" content="https://mzansimoneymatters.co.za/logo-mark.png" />
+
+    <!-- Structured data — helps Google understand who we are + shows a nicer knowledge panel -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://mzansimoneymatters.co.za/#org",
+          "name": "Mzansi Money Matters",
+          "url": "https://mzansimoneymatters.co.za",
+          "logo": "https://mzansimoneymatters.co.za/logo-mark.png",
+          "email": "info@mzansimoneymatters.co.za",
+          "sameAs": [
+            "https://www.instagram.com/mzansimoneymatters",
+            "https://x.com/stillMoneyMat",
+            "https://www.facebook.com/share/1HrWpfWe4M/",
+            "https://ntokozocele.substack.com"
+          ],
+          "description": "Independent South African financial media — markets, news, sector commentary and prediction market data.",
+          "areaServed": "ZA"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://mzansimoneymatters.co.za/#site",
+          "url": "https://mzansimoneymatters.co.za",
+          "name": "Mzansi Money Matters",
+          "publisher": { "@id": "https://mzansimoneymatters.co.za/#org" },
+          "inLanguage": "en-ZA"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

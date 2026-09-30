@@ -1,0 +1,10 @@
+# Mzansi Money Matters — crawler policy
+# Full site is open to search engines and AI crawlers; nothing to hide.
+
+User-agent: *
+Allow: /
+
+# Serverless API routes are for internal use, not indexing.
+Disallow: /api/
+
+Sitemap: https://mzansimoneymatters.co.za/sitemap.xml
