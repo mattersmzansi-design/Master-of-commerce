@@ -4,6 +4,7 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import PageMeta from "../components/PageMeta";
 import TradingViewWidget from "../components/TradingViewWidget";
+import ShareToFacebookButton from "../components/ShareToFacebookButton";
 import { fetchAnalysis, SUGGESTED_TICKERS, tradingViewSymbol } from "../lib/analyst.js";
 
 const DISCLAIMER =
@@ -11,6 +12,30 @@ const DISCLAIMER =
 
 const KIND_LABEL = { jse: "JSE", us: "US Market", crypto: "Crypto" };
 const KIND_COLOR = { jse: "#F0B400", us: "#00D2F0", crypto: "#F24E01" };
+
+// Build the pre-written Facebook caption for an AI analysis. Owner pastes
+// this into FB after clicking share; FB link preview shows the deep-linked
+// /analyst?symbol=X page so the reader lands on the analysis instantly.
+function buildShareCaption(result) {
+  if (!result) return "";
+  const label = KIND_LABEL[result.kind] || "Market";
+  const emoji =
+    result.kind === "crypto" ? "🪙" :
+    result.kind === "jse"    ? "🇿🇦" :
+    "🌎";
+  const teaser = (result.analysis.company || "").split(/(?<=[.!?])\s+/)[0] || "AI-generated analysis available on the site.";
+  return [
+    `${emoji} ${label} · ${result.symbol}`,
+    "",
+    teaser,
+    "",
+    "Full AI-generated breakdown — company, key numbers, bull vs bear, what to watch:",
+    `https://mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`,
+    "",
+    "Educational only · not financial advice",
+    "#MzansiMoneyMatters #JSE #Investing",
+  ].join("\n");
+}
 
 // Simple pill for a "kind" tag.
 function KindPill({ kind }) {
@@ -77,6 +102,18 @@ export default function AnalystPage() {
   const [error,   setError]   = useState(null);
   const [result,  setResult]  = useState(null);
 
+  // Deep-link: if the URL has ?symbol=NPN on first load, auto-run that analysis.
+  // Turns every shared /analyst?symbol=X link into an instant experience for
+  // the person clicking it from Facebook/X/WhatsApp.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const s = params.get("symbol");
+    if (s && s.trim()) {
+      setInput(s.trim().toUpperCase());
+      setSymbol(s.trim().toUpperCase());
+    }
+  }, []);
+
   function submit(e) {
     if (e) e.preventDefault();
     const s = input.trim();
@@ -88,9 +125,15 @@ export default function AnalystPage() {
     setSymbol(sym);
   }
 
-  // Whenever a new symbol commits, fetch the analysis.
+  // Whenever a new symbol commits, fetch the analysis AND update the URL so
+  // it's copy-shareable (?symbol=NPN). Doesn't add a history entry — just
+  // rewrites the current URL, so back-button behaviour stays clean.
   useEffect(() => {
     if (!symbol) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("symbol", symbol.toUpperCase());
+    window.history.replaceState({}, "", url.toString());
+
     setLoading(true); setError(null); setResult(null);
     fetchAnalysis(symbol).then(({ data, error }) => {
       setResult(data);
@@ -223,8 +266,15 @@ export default function AnalystPage() {
                   </span>
                 )}
               </div>
-              <div style={{ fontFamily: MONO, fontSize: 10, color: C.dim }}>
-                Generated {new Date(result.generatedAt).toLocaleString("en-ZA", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" })}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                <div style={{ fontFamily: MONO, fontSize: 10, color: C.dim }}>
+                  Generated {new Date(result.generatedAt).toLocaleString("en-ZA", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" })}
+                </div>
+                <ShareToFacebookButton
+                  caption={buildShareCaption(result)}
+                  url={`https://mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`}
+                  label="Share to FB"
+                />
               </div>
             </div>
 
