@@ -9,6 +9,7 @@ const BRAND_GRAD = "radial-gradient(130% 150% at 28% 28%, #FBC02D 0%, #F7941E 46
 
 const LINKS = [
   { label:"Business News",    path:"/news"     },
+  { label:"AI Analyst",       path:"/analyst"  },
   { label:"JSE",              path:"/jse"      },
   { label:"Sector Health",    path:"/sectors"  },
   { label:"NYSE",             path:"/nyse"     },
