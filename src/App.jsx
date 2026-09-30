@@ -10,6 +10,7 @@ import NYSE from "./pages/NYSE";
 import JSE from "./pages/JSE";
 import Sectors from "./pages/Sectors";
 import Predictions from "./pages/Predictions";
+import Analyst from "./pages/Analyst";
 import Legal from "./pages/Legal";
 import ComingSoon from "./pages/ComingSoon";
 import { fetchSubstackPosts } from "./lib/substack.js";
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/jse" element={<JSE />} />
         <Route path="/sectors" element={<Sectors />} />
         <Route path="/predictions" element={<Predictions />} />
+        <Route path="/analyst" element={<Analyst />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="*" element={
           <ComingSoon title="Page not found" blurb="That page doesn't exist yet." />

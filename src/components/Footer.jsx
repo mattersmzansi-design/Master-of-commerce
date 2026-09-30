@@ -7,6 +7,7 @@ import { SUBSTACK_URL } from "../lib/substack.js";
 // If a section doesn't exist yet, it doesn't appear here.
 const COLS = [
   { title:"Markets",    links:[
+    { l:"AI Analyst",         path:"/analyst"     },
     { l:"JSE Stocks",         path:"/jse"         },
     { l:"Sector Health",      path:"/sectors"     },
     { l:"NYSE Stocks",        path:"/nyse"        },
