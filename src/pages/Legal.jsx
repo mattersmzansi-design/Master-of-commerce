@@ -3,6 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 
 const EFFECTIVE_DATE = "15 August 2026";
 const CONTACT = "info@mzansimoneymatters.co.za";
@@ -62,6 +63,7 @@ export default function LegalPage() {
 
   return (
     <div style={{ background: C.bg }}>
+      <PageMeta title="Legal & Compliance" description="Financial disclaimer, terms of use and privacy policy for Mzansi Money Matters — POPIA-aligned." path="/legal" />
       <Nav />
 
       {/* header */}

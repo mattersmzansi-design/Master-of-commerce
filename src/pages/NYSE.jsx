@@ -3,6 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 import TradingViewWidget from "../components/TradingViewWidget";
 
 // ─── Alpha Vantage key ───────────────────────────────────────────────────────
@@ -177,6 +178,7 @@ export default function NYSEPage() {
 
   return (
     <div style={{background:C.bg}}>
+      <PageMeta title="NYSE & NASDAQ" description="Live NYSE and NASDAQ prices, US market status, and top movers with a live S&P 500 chart." path="/nyse" />
       <Nav/>
 
       {/* header */}

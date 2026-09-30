@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 
 // ─── data ────────────────────────────────────────────────────────────────────
 
@@ -95,6 +96,7 @@ export default function CalendarPage() {
 
   return (
     <div style={{ background:C.bg }}>
+      <PageMeta title="Economic Calendar" description="Upcoming global economic data releases and central bank meetings — rate decisions, CPI, GDP and more." path="/calendar" />
       <Nav/>
 
       {/* page header */}

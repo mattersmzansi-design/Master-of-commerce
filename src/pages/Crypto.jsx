@@ -3,6 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 import TradingViewWidget from "../components/TradingViewWidget";
 
 // ─── helpers ────────────────────────────────────────────────────────────────
@@ -157,6 +158,7 @@ export default function CryptoPage() {
 
   return (
     <div style={{background:C.bg}}>
+      <PageMeta title="Cryptocurrency Markets" description="Live crypto prices, market caps and top movers via CoinGecko — plus a live BTC chart." path="/crypto" />
       <Nav/>
 
       {/* breadcrumb + header */}

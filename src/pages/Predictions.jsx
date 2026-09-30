@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 import { fetchPredictionMarkets } from "../lib/predictions.js";
 
 // Compliance: prediction markets are speculation on future events. Frame
@@ -191,6 +192,7 @@ export default function PredictionsPage() {
 
   return (
     <div style={{ background: C.bg }}>
+      <PageMeta title="Prediction Markets" description="Live Polymarket odds on politics, crypto and business events — what the world is currently pricing." path="/predictions" />
       <Nav />
 
       {/* page header — matches Sectors / NYSE / Crypto */}

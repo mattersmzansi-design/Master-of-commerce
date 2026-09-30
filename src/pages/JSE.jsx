@@ -1,6 +1,7 @@
 import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import PageMeta from "../components/PageMeta";
 import TradingViewWidget from "../components/TradingViewWidget";
 
 // Top JSE tickers — displayed in the ticker tape at the top of the page and
@@ -21,6 +22,7 @@ const JSE_WATCHLIST = [
 export default function JSEPage() {
   return (
     <div style={{ background: C.bg }}>
+      <PageMeta title="JSE Stocks" description="Live JSE prices, All Share index chart and top South African tickers on the Johannesburg Stock Exchange." path="/jse" />
       <Nav />
 
       {/* header */}
