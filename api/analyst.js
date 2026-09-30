@@ -20,9 +20,12 @@ const TWELVEDATA_KEY = process.env.TWELVEDATA_API_KEY;
 const FMP_KEY        = process.env.FMP_API_KEY;
 const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY;
 
-// Which Claude model to use. Sonnet is the sweet spot for analytical writing;
-// override with CLAUDE_MODEL in Vercel env vars if we want to change later.
-const MODEL = process.env.CLAUDE_MODEL || "claude-3-5-sonnet-latest";
+// Which Claude model to use. Anthropic changed model naming after early 2026
+// and removed some "-latest" aliases, so we pin a specific version by default.
+// To upgrade to a newer / different model (e.g. Claude Sonnet 4, Opus 4, or
+// whatever's current), set CLAUDE_MODEL in Vercel env vars — check the
+// current list at https://docs.anthropic.com/en/docs/about-claude/models
+const MODEL = process.env.CLAUDE_MODEL || "claude-3-5-sonnet-20241022";
 
 // ── ticker classification ───────────────────────────────────────────────────
 // Given a user-typed symbol, guess whether it's a JSE / NYSE / crypto ticker.
