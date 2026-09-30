@@ -1,11 +1,27 @@
 import { Link } from "react-router-dom";
 import { C, SERIF, MONO, SANS } from "../theme";
 import { SOCIALS, CONTACT_EMAIL, SocialIcon } from "../lib/socials.jsx";
+import { SUBSTACK_URL } from "../lib/substack.js";
 
+// Every link below points to a real, working page — no placeholders.
+// If a section doesn't exist yet, it doesn't appear here.
 const COLS = [
-  { title:"Markets",  links:[{l:"JSE Stocks",path:"/jse"},{l:"Sector Health",path:"/sectors"},{l:"NYSE Stocks",path:"/nyse"},{l:"Crypto",path:"/crypto"},{l:"Predictions",path:"/predictions"}] },
-  { title:"News",     links:[{l:"Business News",path:"/news"},{l:"SA Economy",path:"/news"},{l:"Global Markets",path:"/news"},{l:"Commodities",path:"/news"}] },
-  { title:"Tools",    links:[{l:"Economic Calendar",path:"/calendar"},{l:"Market Screener",path:"/crypto"},{l:"Portfolio",path:"/"}] },
+  { title:"Markets",    links:[
+    { l:"JSE Stocks",         path:"/jse"         },
+    { l:"Sector Health",      path:"/sectors"     },
+    { l:"NYSE Stocks",        path:"/nyse"        },
+    { l:"Crypto",             path:"/crypto"      },
+    { l:"Prediction Markets", path:"/predictions" },
+  ]},
+  { title:"News & Data", links:[
+    { l:"Business News",      path:"/news"        },
+    { l:"Economic Calendar",  path:"/calendar"    },
+  ]},
+  { title:"About", links:[
+    { l:"Newsletter", external: SUBSTACK_URL         },
+    { l:"Contact",    external: `mailto:${CONTACT_EMAIL}` },
+    { l:"Legal",      path: "/legal"                    },
+  ]},
 ];
 
 export default function Footer({ note, children }) {
@@ -51,7 +67,12 @@ export default function Footer({ note, children }) {
               <div style={{ fontFamily:SANS, fontSize:11, fontWeight:700, letterSpacing:".08em", textTransform:"uppercase", color:"rgba(255,255,255,.5)", marginBottom:14 }}>{col.title}</div>
               {col.links.map(lk => (
                 <div key={lk.l} style={{ marginBottom:8 }}>
-                  <Link to={lk.path} style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.7)" }}>{lk.l}</Link>
+                  {lk.external ? (
+                    <a href={lk.external} target={lk.external.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer"
+                      style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.7)" }}>{lk.l}</a>
+                  ) : (
+                    <Link to={lk.path} style={{ fontFamily:SANS, fontSize:13, color:"rgba(255,255,255,.7)" }}>{lk.l}</Link>
+                  )}
                 </div>
               ))}
             </div>
