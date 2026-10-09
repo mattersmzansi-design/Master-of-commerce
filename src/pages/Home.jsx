@@ -68,6 +68,12 @@ const chgColor = n => n >= 0 ? C.green : C.red;
 const chgLabel = n => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
 const fmtPrice  = (n, prefix="") => `${prefix}${n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
 
+// Every headline is clickable. If the article carries a real source URL, that
+// opens; if it's a sample (no url), fall back to a Google News search for the
+// headline so the reader actually lands on something to read.
+const articleHref = a => a.url || `https://www.google.com/search?q=${encodeURIComponent(a.title)}&tbm=nws`;
+const articleProps = a => ({ href: articleHref(a), target: "_blank", rel: "noopener noreferrer" });
+
 // ─── page ───────────────────────────────────────────────────────────────────
 
 export default function Home() {
@@ -129,9 +135,9 @@ export default function Home() {
       <section className="mc-pad" style={{ maxWidth:1200, margin:"0 auto", padding:"44px 28px 0", borderBottom:`1px solid ${C.rule}` }}>
         <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"1.6fr 1fr", gap:36, alignItems:"start" }}>
 
-          {/* Lead story */}
+          {/* Lead story — whole block is one tappable target */}
           {featuredArticle && (
-            <div style={{ paddingRight:36, borderRight:`1px solid ${C.rule}` }}>
+            <a {...articleProps(featuredArticle)} style={{ display:"block", paddingRight:36, borderRight:`1px solid ${C.rule}`, color:"inherit", textDecoration:"none" }}>
               <div style={{ fontFamily:MONO, fontSize:10, color:C.red, textTransform:"uppercase", letterSpacing:".1em", fontWeight:600, marginBottom:12 }}>
                 Top Story · {featuredArticle.cat}
               </div>
@@ -145,44 +151,34 @@ export default function Home() {
                 <span style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".06em" }}>{featuredArticle.src}</span>
                 <span style={{ color:C.rule }}>·</span>
                 <span style={{ fontFamily:MONO, fontSize:10, color:C.muted }}>{featuredArticle.time}</span>
-                {featuredArticle.url
-                  ? <a href={featuredArticle.url} target="_blank" rel="noopener noreferrer" style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</a>
-                  : <Link to="/news" style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</Link>}
+                <span style={{ marginLeft:"auto", fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>Read more →</span>
               </div>
-            </div>
+            </a>
           )}
 
           {/* Side stories */}
           <div>
             <div style={{ fontFamily:MONO, fontSize:10, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", fontWeight:700, marginBottom:14, paddingBottom:8, borderBottom:`1px solid ${C.rule}` }}>Also in Today's Brief</div>
-            {sideArticles.map((a,i) => {
-              const Tag = a.url ? "a" : "div";
-              const lp = a.url ? { href:a.url, target:"_blank", rel:"noopener noreferrer" } : {};
-              return (
-                <Tag key={a.id} {...lp} style={{ display:"block", paddingBottom:14, marginBottom:14, borderBottom: i<sideArticles.length-1 ? `1px solid ${C.rule2}` : "none" }}>
-                  <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
-                  <h3 style={{ fontFamily:SERIF, fontSize:15, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:5 }}>{a.title}</h3>
-                  <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek}</p>
-                </Tag>
-              );
-            })}
+            {sideArticles.map((a,i) => (
+              <a key={a.id} {...articleProps(a)} style={{ display:"block", paddingBottom:14, marginBottom:14, borderBottom: i<sideArticles.length-1 ? `1px solid ${C.rule2}` : "none", color:"inherit", textDecoration:"none" }}>
+                <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
+                <h3 style={{ fontFamily:SERIF, fontSize:15, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:5 }}>{a.title}</h3>
+                <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek}</p>
+              </a>
+            ))}
             <Link to="/news" style={{ fontFamily:SANS, fontSize:12, fontWeight:600, color:C.blue }}>All business news →</Link>
           </div>
         </div>
 
         {/* bottom article row */}
         <div className="mc-collapse" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24, paddingTop:28, paddingBottom:28, marginTop:12, borderTop:`1px solid ${C.rule}` }}>
-          {bottomArticles.map(a => {
-            const Tag = a.url ? "a" : "div";
-            const lp = a.url ? { href:a.url, target:"_blank", rel:"noopener noreferrer" } : {};
-            return (
-            <Tag key={a.id} {...lp} style={{ display:"block" }}>
+          {bottomArticles.map(a => (
+            <a key={a.id} {...articleProps(a)} style={{ display:"block", color:"inherit", textDecoration:"none" }}>
               <div style={{ fontFamily:MONO, fontSize:9, color:C.muted, textTransform:"uppercase", letterSpacing:".08em", marginBottom:6 }}>{a.cat} · {a.time}</div>
               <h4 style={{ fontFamily:SERIF, fontSize:14, fontWeight:600, lineHeight:1.35, color:C.ink, marginBottom:4 }}>{a.title}</h4>
               <p style={{ fontFamily:SANS, fontSize:12, color:C.muted, lineHeight:1.55 }}>{a.dek.slice(0,90)}…</p>
-            </Tag>
-            );
-          })}
+            </a>
+          ))}
         </div>
       </section>
 
