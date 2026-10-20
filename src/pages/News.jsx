@@ -163,9 +163,12 @@ export default function NewsPage() {
                 style={{fontFamily:SANS,fontSize:13,background:C.paper,border:`1px solid ${C.rule}`,borderRadius:0,padding:"10px 16px",color:C.ink,width:"100%",maxWidth:320,outline:"none"}}/>
             </div>
 
-            {/* featured story */}
+            {/* featured story — whole block is tappable */}
             {showFeatured && featured && (
-              <div className="mc-collapse-sm" style={{borderTop:`2px solid ${C.ink}`,borderBottom:`1px solid ${C.rule}`,paddingTop:22,paddingBottom:22,marginBottom:22,display:"grid",gridTemplateColumns:"1fr 1fr",gap:32}}>
+              <a href={featured.url || `https://www.google.com/search?q=${encodeURIComponent(featured.title)}&tbm=nws`}
+                target="_blank" rel="noopener noreferrer"
+                className="mc-collapse-sm"
+                style={{borderTop:`2px solid ${C.ink}`,borderBottom:`1px solid ${C.rule}`,paddingTop:22,paddingBottom:22,marginBottom:22,display:"grid",gridTemplateColumns:"1fr 1fr",gap:32,color:"inherit",textDecoration:"none"}}>
                 <div>
                   <div style={{fontFamily:MONO,fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".1em",color:C.red,marginBottom:10}}>
                     Featured · {featured.cat}
@@ -181,11 +184,9 @@ export default function NewsPage() {
                   <p style={{fontFamily:SERIF,fontStyle:"italic",fontSize:16,lineHeight:1.7,color:C.muted}}>
                     {featured.dek}
                   </p>
-                  {featured.url
-                    ? <a href={featured.url} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</a>
-                    : <Link to="/news" style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</Link>}
+                  <span style={{display:"inline-block",marginTop:14,fontFamily:SANS,fontSize:12,fontWeight:600,color:C.blue}}>Read full story →</span>
                 </div>
-              </div>
+              </a>
             )}
 
             {/* Ntokozo's Substack posts — the owner's own writing, front and centre */}
@@ -328,10 +329,12 @@ export default function NewsPage() {
 
 function ArticleCard({ article, size, catColor }) {
   const isLarge = size === "large";
-  const Tag = article.url ? "a" : "div";
-  const linkProps = article.url ? { href:article.url, target:"_blank", rel:"noopener noreferrer" } : {};
+  // Always clickable. Real source URL if we have one; otherwise a Google News
+  // search for the headline — so no card is ever a dead target.
+  const href = article.url || `https://www.google.com/search?q=${encodeURIComponent(article.title)}&tbm=nws`;
   return (
-    <Tag {...linkProps} style={{display:"block",background:C.paper,padding: isLarge ? "20px 22px" : "16px 18px",cursor:"pointer"}}
+    <a href={href} target="_blank" rel="noopener noreferrer"
+      style={{display:"block",background:C.paper,padding: isLarge ? "20px 22px" : "16px 18px",cursor:"pointer",color:"inherit",textDecoration:"none"}}
       onMouseEnter={e=>e.currentTarget.style.background="#FFF3E5"}
       onMouseLeave={e=>e.currentTarget.style.background=C.paper}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:isLarge?10:8}}>
@@ -345,6 +348,6 @@ function ArticleCard({ article, size, catColor }) {
       <div style={{display:"flex",gap:10,fontFamily:MONO,fontSize:9,color:C.dim,textTransform:"uppercase",letterSpacing:".06em"}}>
         <span>{article.src}</span>{article.read && <><span>·</span><span>{article.read} read</span></>}
       </div>
-    </Tag>
+    </a>
   );
 }
