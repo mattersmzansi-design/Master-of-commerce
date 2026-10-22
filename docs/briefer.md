@@ -4,7 +4,7 @@
 > branded `mzansi-briefer.pdf` alongside it — edit the lists below, then run
 > `node docs/render-pdfs.mjs` to rebuild the PDF.
 >
-> **Last updated:** 2026-08-16 · Codename: Genesis 🧬
+> **Last updated:** 2026-10-20 · Codename: Genesis 🧬
 
 ---
 
@@ -24,6 +24,12 @@
 - **Prediction Markets page** — `/predictions` renders live Polymarket odds on politics, crypto and business events. Server-side filters to those three categories with a keyword blocklist that keeps sports/celebrity/tasteless markets out. Each card shows the leading outcome as a colour-graded probability, the full YES/NO (or top-3 for multi-outcome) split, 24h volume, and a click-out to Polymarket. Same compliance framing as `/sectors` — educational-only banner + "market pricing" language, never "buy/sell". Fills the slot vacated by Soccer Betting.
 - **Analytics & Speed Insights** — Vercel Web Analytics + Speed Insights wired into the app root. Cookie-less, POPIA-friendly, no consent banner needed. Owner sees page views / top pages / referrers / real-world Core Web Vitals in the Vercel dashboard.
 - **Legal & Compliance page** — `/legal` covers the Financial Disclaimer (not a licensed FSP, data may be delayed/wrong, third-party embeds carry own terms), Terms of Use (permitted/prohibited use, IP, SA governing law), and Privacy Policy (POPIA-aligned — what we collect, what we don't, your rights). Footer's bottom row links to each section. Boilerplate-quality; owner should have a lawyer review before big paid-traffic push.
+- **AI Analyst** — `/analyst` lets readers pull a Claude-powered educational breakdown of any JSE / NYSE ticker or top crypto. Backend (`api/analyst.js`) fuses TwelveData quote + FMP company profile + FMP news headlines + CoinGecko (crypto) and hands the whole blob to Claude with a strict system prompt that returns a structured JSON view (snapshot · what the business does · what the numbers suggest · what to watch). Compliance framing throughout — "educational, not advice", never "buy/sell/target price". Deep-link friendly (`/analyst?symbol=AAPL` auto-runs), with a "Share to Facebook" button that posts a pre-filled caption + canonical URL.
+- **Crypto → Analyst routing** — Clicking any coin row on the `/crypto` page now jumps to `/analyst?symbol=X` (was previously opening a side-panel modal that readers found unusable). Treats a bug fix as a UX upgrade.
+- **Clickable headlines everywhere** — Every news card (home page lead, side, bottom; news page featured, grid) is now always a tappable `<a>`. If the article carries a real source URL it opens that; if it's a sample fallback (shown when the Marketaux API hasn't loaded), it opens a Google News search for the exact headline — so a reader is never stranded on a dead card.
+- **SEO foundation** — `public/sitemap.xml` (10 URLs), `public/robots.txt`, Organization + WebSite JSON-LD in `index.html`, per-page `<PageMeta>` with Open Graph + Twitter cards + canonical URLs. Submitted to Google Search Console.
+- **Share-to-Facebook on reports** — AI Analyst results and `/sectors` cards carry a one-click "Share to Facebook" button that opens FB's sharer prefilled with an emoji-headed caption + canonical URL — turns a reader into a re-poster in one tap.
+- **Promo videos (marketing)** — Three vertical 9:16 motion graphics shipped: 15s brand intro, 30s "Genesis" cut with messaging on investment decision-making + the Mthandeni SK — Gucci ft. MaWhoo track, and a 45s "Kasi to the world" promo for the sibling site `mmm.mzansimoneymatters.online`. Rendered via Playwright + ffmpeg from self-contained HTML templates in `scratchpad/`.
 - **Auto-deploy on Vercel** — Every push to main goes live at www.mzansimoneymatters.co.za within a minute.
 
 ## Not there yet
@@ -35,9 +41,12 @@
 - **Bundle size** — >500kb single JS chunk (build warns). Code-splitting per route will speed up first paint on 3G.
 - **Error tracking** — We have traffic analytics now (Vercel), but no error / crash tracking (Sentry-style). Not urgent while traffic is small.
 - **Lawyer review of /legal** — The legal page is a reasonable-standard template; a real SA attorney should review before any big paid-traffic push (~R1,500–R3,000 for 30 min).
+- **AI Analyst model pin** — Anthropic retired the `claude-3-5-sonnet-latest` alias, so the backend is pinned to `claude-3-5-sonnet-20241022` with a `CLAUDE_MODEL` env-var override. If Anthropic retires that dated version too, the Analyst falls over until the env var is bumped — set up a reminder to roll it when a newer Sonnet lands.
+- **Marketaux fallback showing** — When Marketaux hasn't loaded (API blip, quota), the home + news pages show the hardcoded sample stories. The new click-fallback (Google News search) means those cards aren't dead, but readers notice the same six headlines repeating. A tiny Vercel KV cache + a "news loading…" skeleton state would feel more alive.
 
 ## Next up (my picks)
 
-- **Strategy layer** — a lightweight "Ntokozo's rating" per JSE ticker (Watch / Avoid / etc + one-line reason), stored simply and displayed as a branded card next to the TradingView chart on each stock. Ties into Substack articles. This is the real editorial differentiation for the site — the thing nobody else can copy.
-- **Start writing regularly on Substack** — everything's wired up; the platform now needs actual voice + posts landing weekly.
+- **Distribution, not features** — Last traffic read was 33 visitors / 7 days with 82% bounce. SEO foundation is in; the site now needs *consumption*. Weekly Substack post + 2–3 promo clips per week (we've got the Playwright-rendered video pipeline) landing on Facebook & X will do more for growth than any new page.
+- **Strategy layer** — a lightweight "Ntokozo's rating" per JSE ticker (Watch / Avoid / etc + one-line reason), stored simply and displayed as a branded card next to the TradingView chart on each stock. Ties into Substack articles. This is the real editorial differentiation — the thing nobody else can copy, and it would feed naturally off the AI Analyst's structured output.
+- **FMP for the Calendar** — AI Analyst already uses FMP for company profiles + news. Adding FMP's economic calendar endpoint would retire the hardcoded `/calendar` data in a few hours of work (free tier is 250 req/day — more than enough).
 - Deep-link search results to the exact item (article / ticker / event).
