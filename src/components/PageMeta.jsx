@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet-async";
 // for Google (identical titles = confusion + poor rankings) and worse for
 // users landing on a specific page from a shared link.
 
-const BASE = "https://mzansimoneymatters.co.za";
+const BASE = "https://www.mzansimoneymatters.co.za";
 const SITE_NAME = "Mzansi Money Matters";
 
 export default function PageMeta({ title, description, path = "" }) {

@@ -7,4 +7,4 @@ Allow: /
 # Serverless API routes are for internal use, not indexing.
 Disallow: /api/
 
-Sitemap: https://mzansimoneymatters.co.za/sitemap.xml
+Sitemap: https://www.mzansimoneymatters.co.za/sitemap.xml
