@@ -22,7 +22,7 @@ function buildShareCaption(row) {
     firstSentence || "This week's sector read is up on the site.",
     "",
     "Full breakdown — tailwinds, headwinds & what to watch next:",
-    "https://mzansimoneymatters.co.za/sectors",
+    "https://www.mzansimoneymatters.co.za/sectors",
     "",
     "#JSE #SouthAfricanMarkets #MoneyMatters",
   ].filter(v => v !== null).join("\n");
@@ -197,7 +197,7 @@ function SectorCard({ row }) {
         {row.health_score != null && (
           <ShareToFacebookButton
             caption={buildShareCaption(row)}
-            url={`https://mzansimoneymatters.co.za/sectors#${encodeURIComponent((row.sector || "").toLowerCase().replace(/\s+/g, "-"))}`}
+            url={`https://www.mzansimoneymatters.co.za/sectors#${encodeURIComponent((row.sector || "").toLowerCase().replace(/\s+/g, "-"))}`}
             label="Share to FB"
           />
         )}

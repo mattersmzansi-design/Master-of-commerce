@@ -129,7 +129,7 @@ export default async function handler(req, res) {
       limit:     "60",
     });
     const r = await fetch(`${GAMMA_URL}?${params.toString()}`, {
-      headers: { "User-Agent": "MzansiMoneyMatters/1.0 (+https://mzansimoneymatters.co.za)" },
+      headers: { "User-Agent": "MzansiMoneyMatters/1.0 (+https://www.mzansimoneymatters.co.za)" },
     });
     if (!r.ok) throw new Error(`Polymarket returned HTTP ${r.status}`);
     const raw = await r.json();

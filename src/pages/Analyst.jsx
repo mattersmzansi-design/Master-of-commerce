@@ -30,7 +30,7 @@ function buildShareCaption(result) {
     teaser,
     "",
     "Full AI-generated breakdown — company, key numbers, bull vs bear, what to watch:",
-    `https://mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`,
+    `https://www.mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`,
     "",
     "Educational only · not financial advice",
     "#MzansiMoneyMatters #JSE #Investing",
@@ -272,7 +272,7 @@ export default function AnalystPage() {
                 </div>
                 <ShareToFacebookButton
                   caption={buildShareCaption(result)}
-                  url={`https://mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`}
+                  url={`https://www.mzansimoneymatters.co.za/analyst?symbol=${encodeURIComponent(result.symbol)}`}
                   label="Share to FB"
                 />
               </div>

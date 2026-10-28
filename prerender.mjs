@@ -18,7 +18,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST = join(__dirname, 'dist');
-const BASE = 'https://mzansimoneymatters.co.za';
+const BASE = 'https://www.mzansimoneymatters.co.za';
 
 // One entry per sitemap route. `preview` is the HTML Google will index — write
 // it like a mini landing page for the route: real headings, a two-sentence

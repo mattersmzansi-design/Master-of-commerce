@@ -24,7 +24,7 @@ function stripHtml(s) {
 export default async function handler(req, res) {
   try {
     const r = await fetch(FEED_URL, {
-      headers: { "User-Agent": "MzansiMoneyMatters/1.0 (+https://mzansimoneymatters.co.za)" },
+      headers: { "User-Agent": "MzansiMoneyMatters/1.0 (+https://www.mzansimoneymatters.co.za)" },
     });
     if (!r.ok) throw new Error(`Substack RSS returned HTTP ${r.status}`);
     const xml = await r.text();
