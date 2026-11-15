@@ -115,6 +115,7 @@ export function fillShell(shell, { title, description, canonical, ogType = "webs
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`);
 }
 
+// keyTakeawaysHtml and faq[].answerHtml come from MMM BLADE SEO already sanitised, like the body's html.
 // Crawler HTML in layout B ("briefing with side rail"). React replaces it when the page loads
 // (src/pages/BlogArticle.jsx renders the same layout), so people see the live app with the menu.
 const INK = "#012030";
@@ -124,13 +125,13 @@ const mono = "font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:7
 export function articleMarkup(a) {
   const by = [a.author ? `By <b>${esc(a.author.name)}</b>` : "", `Updated ${esc(longDate(a.updatedAt))}`, `${a.readMinutes} min read`].filter(Boolean).join(" · ");
   const takeaways = a.keyTakeaways.length
-    ? `<section><div style="${mono}">Key takeaways</div><ul>${a.keyTakeaways.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></section>`
+    ? `<section><div style="${mono}">Key takeaways</div><ul>${a.keyTakeaways.map((t, i) => `<li>${a.keyTakeawaysHtml?.[i] ?? esc(t)}</li>`).join("")}</ul></section>`
     : "";
   const toc = a.headings.length >= 3
     ? `<nav aria-label="In this article"><div style="${mono}">In this article</div><ol>${a.headings.map((h) => `<li><a href="#${esc(h.id)}">${esc(h.text)}</a></li>`).join("")}</ol></nav>`
     : "";
   const faq = a.faq.length
-    ? `<h2>Frequently asked questions</h2>${a.faq.map((f) => `<h3>${esc(f.question)}</h3><p>${esc(f.answer)}</p>`).join("")}`
+    ? `<h2>Frequently asked questions</h2>${a.faq.map((f) => `<h3>${esc(f.question)}</h3><p>${f.answerHtml ?? esc(f.answer)}</p>`).join("")}`
     : "";
   const sources = a.sources.length
     ? `<h2>Sources</h2><ul>${a.sources.map((s) => `<li><a href="${esc(s.url)}" rel="noopener noreferrer">${esc(s.name)}</a></li>`).join("")}</ul>`

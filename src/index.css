@@ -98,3 +98,6 @@ input::placeholder { color: #8ABCCA; }
 @media (max-width: 560px) { .mc-prose table { display: block; overflow-x: auto; } }
 .mc-prose th { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: .1em; text-align: left; padding: 9px 12px; border-bottom: 2px solid #012030; }
 .mc-prose td { padding: 9px 12px; border-bottom: 1px solid #EFE7DB; }
+
+/* Source links inside blog takeaways and FAQ answers */
+.mc-inline-links a { color: #0B7C93; text-decoration: underline; text-underline-offset: 2px; }

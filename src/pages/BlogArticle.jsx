@@ -12,13 +12,14 @@ import { loadBlogArticle, longDate } from "../lib/blog.js";
 const LABEL = { fontFamily: MONO, fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".12em", color: C.ink, marginBottom: 10 };
 const CARD = { background: C.paper, border: `1px solid ${C.rule}`, padding: "16px 18px" };
 
-function Dots({ items }) {
+// html (when the feed sends it) is the same line with its source links, already sanitised by MMM BLADE SEO.
+function Dots({ items, html }) {
   return (
-    <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 9 }}>
-      {items.map((t) => (
+    <ul className="mc-inline-links" style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 9 }}>
+      {items.map((t, i) => (
         <li key={t} style={{ position: "relative", paddingLeft: 18, fontFamily: SERIF, fontSize: 14.5, lineHeight: 1.55 }}>
           <span style={{ position: "absolute", left: 0, top: "0.6em", width: 6, height: 6, borderRadius: 3, background: C.cyan }} />
-          {t}
+          {html?.[i] ? <span dangerouslySetInnerHTML={{ __html: html[i] }} /> : t}
         </li>
       ))}
     </ul>
@@ -107,7 +108,7 @@ export default function BlogArticle() {
                   {a.faq.map((f) => (
                     <div key={f.question}>
                       <h3>{f.question}</h3>
-                      <p>{f.answer}</p>
+                      {f.answerHtml ? <p dangerouslySetInnerHTML={{ __html: f.answerHtml }} /> : <p>{f.answer}</p>}
                     </div>
                   ))}
                 </section>
@@ -142,7 +143,7 @@ export default function BlogArticle() {
               {a.keyTakeaways.length > 0 && (
                 <div style={{ ...CARD, borderTop: `3px solid ${C.gold}` }}>
                   <div style={LABEL}>Key takeaways</div>
-                  <Dots items={a.keyTakeaways} />
+                  <Dots items={a.keyTakeaways} html={a.keyTakeawaysHtml} />
                 </div>
               )}
               {a.headings.length >= 3 && (
