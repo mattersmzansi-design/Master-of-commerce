@@ -69,3 +69,32 @@ input::placeholder { color: #8ABCCA; }
 @media (max-width: 420px) {
   .mc-footer { grid-template-columns: 1fr !important; }
 }
+
+/* ─── Blog (layout B: briefing with side rail) ───────────────────────────────
+   The article column and a sticky rail on the right; on tablets and phones the
+   rail moves above the article and "More on this topic" moves below it. */
+.mc-blog-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 44px; align-items: start; }
+.mc-blog-rail { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 16px; }
+.mc-blog-more-sm { display: none; }
+@media (max-width: 860px) {
+  .mc-blog-grid { grid-template-columns: 1fr; gap: 22px; }
+  .mc-blog-rail { position: static; order: -1; }
+  .mc-blog-rail .mc-blog-more { display: none; }
+  .mc-blog-more-sm { display: block; }
+}
+
+/* Article text from the SEO app (already sanitised HTML). */
+.mc-prose { font-family: 'Lora', Georgia, serif; font-size: 16.5px; line-height: 1.75; color: #012030; }
+.mc-prose p { margin-bottom: 16px; }
+.mc-prose h2 { font-size: 24px; font-weight: 700; line-height: 1.2; border-top: 2px solid #012030; padding-top: 16px; margin: 30px 0 12px; scroll-margin-top: 80px; }
+.mc-prose h3 { font-size: 18px; font-weight: 700; margin: 22px 0 8px; }
+.mc-prose a { color: #0B7C93; text-decoration: underline; text-underline-offset: 2px; }
+.mc-prose ul, .mc-prose ol { margin: 0 0 16px 22px; }
+.mc-prose li { margin-bottom: 6px; }
+.mc-prose strong { font-weight: 700; }
+.mc-prose blockquote { border-left: 3px solid #00D2F0; padding-left: 16px; color: #5A727C; margin: 0 0 16px; }
+.mc-prose table { width: 100%; background: #fff; border: 1px solid #E4D9CC; margin: 8px 0 18px; font-family: 'Poppins', system-ui, sans-serif; font-size: 13.5px; }
+/* On phones a wide table scrolls on its own instead of pushing the page sideways. */
+@media (max-width: 560px) { .mc-prose table { display: block; overflow-x: auto; } }
+.mc-prose th { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: .1em; text-align: left; padding: 9px 12px; border-bottom: 2px solid #012030; }
+.mc-prose td { padding: 9px 12px; border-bottom: 1px solid #EFE7DB; }

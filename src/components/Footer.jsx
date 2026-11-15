@@ -17,6 +17,7 @@ const COLS = [
   { title:"News & Data", links:[
     { l:"Business News",      path:"/news"        },
     { l:"Economic Calendar",  path:"/calendar"    },
+    { l:"Blog",               path:"/blog"        },
   ]},
   { title:"About", links:[
     { l:"Newsletter", external: SUBSTACK_URL         },

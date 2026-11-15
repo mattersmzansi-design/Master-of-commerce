@@ -217,6 +217,10 @@ const ROUTES = [
 // Read the Vite-built template and keep its asset script references intact.
 const template = readFileSync(join(DIST, 'index.html'), 'utf8');
 
+// Keep an untouched copy for the blog: api/blog-page.js fills it with each article's HTML at
+// request time (articles come from MMM BLADE SEO, so they can't be written at build time).
+writeFileSync(join(DIST, '_shell.html'), template);
+
 const results = [];
 
 for (const route of ROUTES) {

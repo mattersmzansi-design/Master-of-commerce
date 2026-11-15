@@ -4,7 +4,7 @@
 > branded `mzansi-briefer.pdf` alongside it — edit the lists below, then run
 > `node docs/render-pdfs.mjs` to rebuild the PDF.
 >
-> **Last updated:** 2026-10-20 · Codename: Genesis 🧬
+> **Last updated:** 2026-11-15 · Codename: Genesis 🧬
 
 ---
 
@@ -27,13 +27,15 @@
 - **AI Analyst** — `/analyst` lets readers pull a Claude-powered educational breakdown of any JSE / NYSE ticker or top crypto. Backend (`api/analyst.js`) fuses TwelveData quote + FMP company profile + FMP news headlines + CoinGecko (crypto) and hands the whole blob to Claude with a strict system prompt that returns a structured JSON view (snapshot · what the business does · what the numbers suggest · what to watch). Compliance framing throughout — "educational, not advice", never "buy/sell/target price". Deep-link friendly (`/analyst?symbol=AAPL` auto-runs), with a "Share to Facebook" button that posts a pre-filled caption + canonical URL.
 - **Crypto → Analyst routing** — Clicking any coin row on the `/crypto` page now jumps to `/analyst?symbol=X` (was previously opening a side-panel modal that readers found unusable). Treats a bug fix as a UX upgrade.
 - **Clickable headlines everywhere** — Every news card (home page lead, side, bottom; news page featured, grid) is now always a tappable `<a>`. If the article carries a real source URL it opens that; if it's a sample fallback (shown when the Marketaux API hasn't loaded), it opens a Google News search for the exact headline — so a reader is never stranded on a dead card.
-- **SEO foundation** — `public/sitemap.xml` (10 URLs), `public/robots.txt`, Organization + WebSite JSON-LD in `index.html`, per-page `<PageMeta>` with Open Graph + Twitter cards + canonical URLs. Submitted to Google Search Console.
+- **Blog (from MMM BLADE SEO)** — `/blog` and `/blog/<article>` show articles published in MMM BLADE SEO, in the "briefing with side rail" layout (key takeaways, contents and related articles beside the text; above it on phones). Each article is sent as real HTML with its own title, description, canonical link and Article + breadcrumb structured data, so Google reads it without running JavaScript. Articles are read from the feed address in the Vercel variable `MMM_BLOG_FEED`; without it the blog says "No articles yet". Footer links to it.
+- **SEO foundation** — `/sitemap.xml` (now built live: the fixed pages plus every published blog article), `public/robots.txt`, Organization + WebSite JSON-LD in `index.html`, per-page `<PageMeta>` with Open Graph + Twitter cards + canonical URLs. Submitted to Google Search Console.
 - **Share-to-Facebook on reports** — AI Analyst results and `/sectors` cards carry a one-click "Share to Facebook" button that opens FB's sharer prefilled with an emoji-headed caption + canonical URL — turns a reader into a re-poster in one tap.
 - **Promo videos (marketing)** — Three vertical 9:16 motion graphics shipped: 15s brand intro, 30s "Genesis" cut with messaging on investment decision-making + the Mthandeni SK — Gucci ft. MaWhoo track, and a 45s "Kasi to the world" promo for the sibling site `mmm.mzansimoneymatters.online`. Rendered via Playwright + ffmpeg from self-contained HTML templates in `scratchpad/`.
 - **Auto-deploy on Vercel** — Every push to main goes live at www.mzansimoneymatters.co.za within a minute.
 
 ## Not there yet
 
+- **Blog switch-on** — Set `MMM_BLOG_FEED` in Vercel (Production + Preview) to the feed address shown on an article in MMM BLADE SEO, then publish an article. Blog isn't in the top menu yet (footer only).
 - **Deep links from search results** — Search jumps to the right page but doesn't scroll to or highlight the exact item. Needs anchor IDs + scrollIntoView.
 - **Search on mobile** — Removed to keep the header clean; desktop only for now. A phone-friendly version (icon in the burger menu?) is on the list.
 - **Alpha Vantage rate limit** — Free tier is 25 requests/day. On a busy day the NYSE page falls back to sample data. A paid tier or a caching layer fixes it.

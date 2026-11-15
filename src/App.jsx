@@ -12,6 +12,8 @@ import Sectors from "./pages/Sectors";
 import Predictions from "./pages/Predictions";
 import Analyst from "./pages/Analyst";
 import Legal from "./pages/Legal";
+import Blog from "./pages/Blog";
+import BlogArticle from "./pages/BlogArticle";
 import ComingSoon from "./pages/ComingSoon";
 import { fetchSubstackPosts } from "./lib/substack.js";
 import { addToIndex } from "./lib/searchIndex.js";
@@ -42,6 +44,8 @@ export default function App() {
         <Route path="/predictions" element={<Predictions />} />
         <Route path="/analyst" element={<Analyst />} />
         <Route path="/legal" element={<Legal />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogArticle />} />
         <Route path="*" element={
           <ComingSoon title="Page not found" blurb="That page doesn't exist yet." />
         } />
