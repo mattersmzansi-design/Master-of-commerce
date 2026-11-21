@@ -33,3 +33,17 @@ export async function loadBlogArticle(slug) {
 export function longDate(iso) {
   return new Date(iso).toLocaleDateString("en-ZA", { timeZone: "Africa/Johannesburg", day: "numeric", month: "long", year: "numeric" });
 }
+
+// Videos: MMM BLADE SEO turns a paragraph that is only a YouTube link into
+// <div data-youtube="ID" data-shape="short|wide"><a …>Watch the video on YouTube</a></div>.
+// Here that becomes a privacy-friendly YouTube player (youtube-nocookie.com). The id is checked
+// again, so nothing but an 11-character video id ever reaches the player's address.
+const VIDEO = /<div data-youtube="([A-Za-z0-9_-]{11})" data-shape="(short|wide)">[\s\S]*?<\/div>/g;
+
+export function withVideos(html) {
+  return String(html || "").replace(
+    VIDEO,
+    (_, id, shape) =>
+      `<div class="mc-video mc-video-${shape}"><iframe src="https://www.youtube-nocookie.com/embed/${id}" title="YouTube video" loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>`,
+  );
+}

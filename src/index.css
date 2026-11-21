@@ -101,3 +101,8 @@ input::placeholder { color: #8ABCCA; }
 
 /* Source links inside blog takeaways and FAQ answers */
 .mc-inline-links a { color: #0B7C93; text-decoration: underline; text-underline-offset: 2px; }
+
+/* YouTube videos inside blog articles: wide 16:9, Shorts 9:16 and narrower */
+.mc-video { position: relative; width: 100%; aspect-ratio: 16 / 9; margin: 8px 0 20px; background: #012030; }
+.mc-video-short { aspect-ratio: 9 / 16; max-width: 340px; margin-left: auto; margin-right: auto; }
+.mc-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

@@ -4,7 +4,7 @@ import { C, SERIF, MONO, SANS } from "../theme";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import PageMeta from "../components/PageMeta";
-import { loadBlogArticle, longDate } from "../lib/blog.js";
+import { loadBlogArticle, longDate, withVideos } from "../lib/blog.js";
 
 // One blog article in layout B ("briefing with side rail"), chosen from three mockups.
 // Articles are written and published in MMM BLADE SEO; the HTML arrives already sanitised.
@@ -100,7 +100,7 @@ export default function BlogArticle() {
 
           <div className="mc-pad mc-blog-grid" style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 22px 44px" }}>
             <article style={{ minWidth: 0 }}>
-              <div className="mc-prose" dangerouslySetInnerHTML={{ __html: a.html }} />
+              <div className="mc-prose" dangerouslySetInnerHTML={{ __html: withVideos(a.html) }} />
 
               {a.faq.length > 0 && (
                 <section className="mc-prose">
